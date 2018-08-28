@@ -5,23 +5,23 @@ import java.util.Date;
 public class Pedido {
 	private int id;
 	private Date dataPedido;
-	private int idCliente;
+	private Cliente cliente;
 	private double total;
 	private double desconto;
-	private int idPagamento;
+	private TipoPagamento pagamento;
 	private double troco;
 	private double subTotal;
 
 	public Pedido(){}
 
-	public Pedido(int id, Date dataPedido, int idCliente, double total, double desconto, 
-												int idPagamento, double troco,double subTotal) {
+	public Pedido(int id, Date dataPedido, Cliente cliente, double total, double desconto, 
+												TipoPagamento pagamento, double troco,double subTotal) {
 		this.id = id;
 		this.dataPedido = dataPedido;
-		this.idCliente = idCliente;
+		this.cliente = cliente;
 		this.total = total;
 		this.desconto = desconto;
-		this.idPagamento = idPagamento;
+		this.pagamento = pagamento;
 		this.troco = troco;
 		this.subTotal = subTotal;
 	}
@@ -42,12 +42,12 @@ public class Pedido {
 		this.dataPedido = dataPedido;
 	}
 
-	public int getIdCliente() {
-		return idCliente;
+	public Cliente getIdCliente() {
+		return cliente;
 	}
 
-	public void setIdCliente(int idCliente) {
-		this.idCliente = idCliente;
+	public void setIdCliente(Cliente cliente) {
+		this.cliente = cliente;
 	}
 
 	public double getTotal() {
@@ -66,12 +66,12 @@ public class Pedido {
 		this.desconto = desconto;
 	}
 
-	public int getIdPagamento() {
-		return idPagamento;
+	public TipoPagamento getIdPagamento() {
+		return pagamento;
 	}
 
-	public void setIdPagamento(int idPagamento) {
-		this.idPagamento = idPagamento;
+	public void setIdPagamento(TipoPagamento pagamento) {
+		this.pagamento = pagamento;
 	}
 
 	public double getTroco() {
@@ -92,8 +92,8 @@ public class Pedido {
 
 	@Override
 	public String toString() {
-		return id + "," + dataPedido + "," + idCliente + "," + total + "," + desconto + "," 
-																+ idPagamento + "," + troco + "," + subTotal;
+		return id + "," + dataPedido + "," + cliente.getId() + "," + total + "," + desconto + "," 
+																+ pagamento.getId() + "," + troco + "," + subTotal;
 	}
 	
 	
