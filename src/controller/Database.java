@@ -2,6 +2,7 @@ package controller;
 
 import java.io.File;
 import java.io.IOException;
+import utils.FileManager;
 
 public class Database {
 	private File fileClientes = null;
@@ -10,9 +11,33 @@ public class Database {
 	private File fileTipoPagamento = null;
 	private File filePedido = null;
 	private File fileItensPedido = null;
+	private Database instance = null;
 	
-	private Database(){}
+	private Database()
+	{
+		try
+		{
+			getDatabaseClientes();
+			getDatabaseItensPedido();
+			getDatabasePedido();
+			getDatabaseProdutos();
+			getDatabaseTipoPagamento();
+			getDatabaseTipoProduto();
+		}
+		catch(IOException ex)
+		{
+			System.err.println(ex.getMessage());
+		}
+	}
 		
+	public Database getInstance()
+	{
+		if(instance == null)
+			instance = new Database();
+		
+		return instance;
+	}
+	
 	private File checaFile(String file) throws IOException
 	{
 		File databaseFile = null;
@@ -70,6 +95,8 @@ public class Database {
 		if(fileTipoProduto == null)
 		{
 			fileTipoProduto = checaFile("tipoProdutoDatabase.csv");
+			String iniciais = "1,Refrigerante\n2,Comida";
+			FileManager.writeFile(fileTipoProduto, iniciais);
 		}
 		
 		return fileProdutos;
@@ -80,6 +107,8 @@ public class Database {
 		if(fileTipoPagamento == null)
 		{
 			fileTipoPagamento = checaFile("tipoPagamentoDatabase.csv");
+			String iniciais = "1,Cartão\n2,Dinheiro";
+			FileManager.writeFile(fileTipoPagamento, iniciais);
 		}
 		
 		return fileTipoPagamento;
@@ -104,4 +133,7 @@ public class Database {
 		
 		return fileItensPedido;
 	}
+	
+	
+	
 }
