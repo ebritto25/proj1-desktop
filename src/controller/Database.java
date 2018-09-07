@@ -11,7 +11,7 @@ public class Database {
 	private File fileTipoPagamento = null;
 	private File filePedido = null;
 	private File fileItensPedido = null;
-	private Database instance = null;
+	private static Database instance = null;
 	
 	private Database()
 	{
@@ -30,7 +30,7 @@ public class Database {
 		}
 	}
 		
-	public Database getInstance()
+	public static Database getInstance()
 	{
 		if(instance == null)
 			instance = new Database();

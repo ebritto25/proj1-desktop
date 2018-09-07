@@ -5,12 +5,22 @@ public class Produto {
 	private int id;
 	private String descricao;
 	private double preco;
-	private int tipo;
+	private TipoProduto tipo;
 
 	
 	public Produto(){}
 	
-	public Produto(int id, String descricao, double preco, int tipo) {
+	public Produto(String produto, TipoProduto tProduto)
+	{
+		String[] dados = produto.trim().split(",");
+		
+		this.id = Integer.parseInt(dados[0]);
+		this.descricao = dados[1];
+		this.preco = Double.parseDouble(dados[2]);
+		this.tipo = tProduto;
+	}
+	
+	public Produto(int id, String descricao, double preco, TipoProduto tipo) {
 		this.id = id;
 		this.descricao = descricao;
 		this.preco = preco;
@@ -41,17 +51,17 @@ public class Produto {
 		this.preco = preco;
 	}
 
-	public int getTipo() {
+	public TipoProduto getTipo() {
 		return tipo;
 	}
 
-	public void setTipo(int tipo) {
+	public void setTipo(TipoProduto tipo) {
 		this.tipo = tipo;
 	}
 
 	@Override
 	public String toString() {
-		return id + "," + descricao + "," + preco + "," + tipo;
+		return id + "," + descricao + "," + preco + "," + tipo.getId()+"\n";
 	}
 	
 	

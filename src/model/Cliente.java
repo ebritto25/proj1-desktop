@@ -11,6 +11,18 @@ public class Cliente {
 	
 	public Cliente(){}
 	
+	public Cliente(String cliente)
+	{
+		String[] dados = cliente.trim().split(",");
+		
+		this.id = Integer.parseInt(dados[0]);
+		this.nome = dados[1];
+		this.telefone = dados[2];
+		this.endereco = dados[3];
+		this.bairro = dados[4];
+		this.cep = dados[5];
+	}
+	
 	public Cliente(int id, String nome, String telefone,String endereco,String bairro, String cep)
 	{
 		this.id = id;
@@ -71,7 +83,7 @@ public class Cliente {
 
 	@Override
 	public String toString() {
-		return id + "," + nome + "," + telefone + "," + endereco + "," + bairro + "," + cep;
+		return id + "," + nome + "," + telefone + "," + endereco + "," + bairro + "," + cep + "\n";
 	}
 	
 	

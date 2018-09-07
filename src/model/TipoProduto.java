@@ -7,6 +7,13 @@ public class TipoProduto {
 	
 	public TipoProduto(){}
 
+	public TipoProduto(String TipoProduto)
+	{
+		String[] dados = TipoProduto.split(",");
+		this.id = Integer.parseInt(dados[0]);
+		this.descricao = dados[1];
+	}
+	
 	public TipoProduto(int id, String descricao) {
 		this.id = id;
 		this.descricao = descricao;
@@ -30,7 +37,7 @@ public class TipoProduto {
 
 	@Override
 	public String toString() {
-		return id + "," + descricao;
+		return id + "," + descricao+"\n";
 	}
 	
 	

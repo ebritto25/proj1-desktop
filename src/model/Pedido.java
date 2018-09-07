@@ -93,7 +93,7 @@ public class Pedido {
 	@Override
 	public String toString() {
 		return id + "," + dataPedido + "," + cliente.getId() + "," + total + "," + desconto + "," 
-																+ pagamento.getId() + "," + troco + "," + subTotal;
+																+ pagamento.getId() + "," + troco + "," + subTotal + "\n";
 	}
 	
 	
