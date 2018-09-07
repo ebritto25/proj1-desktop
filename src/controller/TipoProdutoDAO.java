@@ -31,7 +31,7 @@ public class TipoProdutoDAO {
 	{
 		if(connect())
 		{
-			return FileManager.writeFile(db, tp.toString());
+			return FileManager.writeFile(db, tp.toString(),true);
 		}
 		
 		return false;
@@ -82,7 +82,7 @@ public class TipoProdutoDAO {
 		if(connect())
 		{
 			String dados = FileManager.readFile(db);
-			return FileManager.writeFile(db, dados.replace(tp.toString(), novosDados.toString()));
+			return FileManager.writeFile(db, dados.replace(tp.toString(), novosDados.toString()),false);
 		}
 		
 		return false;
@@ -94,7 +94,7 @@ public class TipoProdutoDAO {
 		if(connect())
 		{
 			String dados = FileManager.readFile(db);
-			return FileManager.writeFile(db, dados.replace(tp.toString(), ""));
+			return FileManager.writeFile(db, dados.replace(tp.toString(), ""),false);
 		}
 		
 		return false;

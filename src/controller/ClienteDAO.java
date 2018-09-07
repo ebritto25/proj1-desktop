@@ -35,7 +35,7 @@ public class ClienteDAO {
 	{
 		if(connect())
 		{
-			return FileManager.writeFile(db, cli.toString());
+			return FileManager.writeFile(db, cli.toString(),true);
 		}
 		
 		return false;
@@ -88,7 +88,7 @@ public class ClienteDAO {
 			String dados = FileManager.readFile(db);
 			String novosRegistros = dados.replace(cli.toString(),"");
 			
-			return FileManager.writeFile(db, novosRegistros);
+			return FileManager.writeFile(db, novosRegistros,false);
 			
 		}
 		
@@ -102,7 +102,7 @@ public class ClienteDAO {
 			String dados = FileManager.readFile(db);
 			String novosRegistros = dados.replace(cli.toString(),novosDados.toString());
 			
-			return FileManager.writeFile(db, novosRegistros);
+			return FileManager.writeFile(db, novosRegistros,false);
 			
 		}
 		return false;

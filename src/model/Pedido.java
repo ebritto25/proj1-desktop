@@ -14,6 +14,35 @@ public class Pedido {
 
 	public Pedido(){}
 
+	
+	public Pedido(String registro, Cliente cliente, TipoPagamento pagamento)
+	{
+		String[] dados = registro.split(",");
+		
+		int id = Integer.parseInt(dados[0]);
+		this.id = id;
+		
+		Date data = new Date(Long.parseLong(dados[1]));
+		this.dataPedido = data;
+		
+		this.cliente = cliente;
+		
+		double total = Double.parseDouble(dados[3]);
+		this.total = total;
+		
+		double desconto = Double.parseDouble(dados[4]);
+		this.desconto = desconto;
+		
+		
+		this.pagamento = pagamento;
+		
+		double troco = Double.parseDouble(dados[6]);
+		this.troco = troco;
+		
+		double subTotal = Double.parseDouble(dados[7]);
+		this.subTotal = subTotal;
+	}
+	
 	public Pedido(int id, Date dataPedido, Cliente cliente, double total, double desconto, 
 												TipoPagamento pagamento, double troco,double subTotal) {
 		this.id = id;
@@ -92,7 +121,7 @@ public class Pedido {
 
 	@Override
 	public String toString() {
-		return id + "," + dataPedido + "," + cliente.getId() + "," + total + "," + desconto + "," 
+		return id + "," + dataPedido.getTime() + "," + cliente.getId() + "," + total + "," + desconto + "," 
 																+ pagamento.getId() + "," + troco + "," + subTotal + "\n";
 	}
 	
