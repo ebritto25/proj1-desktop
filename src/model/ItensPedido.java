@@ -1,32 +1,32 @@
 package model;
 
 public class ItensPedido {
-	private int idProduto;
-	private int idPedido;
+	private Produto produto;
+	private Pedido pedido;
 	private int quantidade;
 	
 	public ItensPedido(){}
 
-	public ItensPedido(int idProduto, int idPedido,int quantidade) {
-		this.idProduto = idProduto;
-		this.idPedido = idPedido;
+	public ItensPedido(Produto produto, Pedido pedido,int quantidade) {
+		this.produto = produto;
+		this.pedido = pedido;
 		this.quantidade = quantidade;
 	}
 
-	public int getIdProduto() {
-		return idProduto;
+	public Produto getProduto() {
+		return produto;
 	}
 
-	public void setIdProduto(int idProduto) {
-		this.idProduto = idProduto;
+	public void setProduto(Produto produto) {
+		this.produto = produto;
 	}
 
-	public int getIdPedido() {
-		return idPedido;
+	public Pedido getPedido() {
+		return pedido;
 	}
 
-	public void setIdPedido(int idPedido) {
-		this.idPedido = idPedido;
+	public void setPedido(Pedido pedido) {
+		this.pedido = pedido;
 	}
 
 	public int getQuantidade() {
@@ -38,10 +38,9 @@ public class ItensPedido {
 	}
 
 	
-	
 	@Override
 	public String toString() {
-		return idProduto + "," + idPedido + "," + quantidade;
+		return produto.getId() + "," + pedido.getId() + "," + quantidade+"\n";
 	}
 	
 }
