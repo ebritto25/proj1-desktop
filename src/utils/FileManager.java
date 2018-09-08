@@ -33,13 +33,14 @@ public class FileManager {
 		}
 	}
 	
-	public static boolean writeFile(File file,String texto)
+	public static boolean writeFile(File file,String texto, boolean append)
 	{
 		BufferedWriter buffWriter;
 		boolean ret = false;
 		try
 		{
-			buffWriter = new BufferedWriter(new FileWriter(file));
+			
+			buffWriter = new BufferedWriter(new FileWriter(file,append));
 			buffWriter.write(texto);
 			buffWriter.close();
 			ret = true;
