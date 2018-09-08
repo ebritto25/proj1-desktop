@@ -5,16 +5,32 @@
  */
 package view;
 
+import controller.ProdutoDAO;
+import controller.TipoProdutoDAO;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
+import model.Produto;
+import model.TipoProduto;
+
 /**
  *
  * @author rodrigo
  */
 public class JFrameCadProduto extends javax.swing.JFrame {
 
+    private Map<String,TipoProduto> lista_tipos;
     /**
      * Creates new form JFrameCadProduto
      */
     public JFrameCadProduto() {
+        
+        lista_tipos = new HashMap<String,TipoProduto>();
+        
+        fillCombo();
+        
         initComponents();
     }
 
@@ -37,6 +53,7 @@ public class JFrameCadProduto extends javax.swing.JFrame {
         jComboTipos = new javax.swing.JComboBox<>();
         btnSalvar = new javax.swing.JButton();
         btnLimpar = new javax.swing.JButton();
+        btnNovoTipo = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -48,11 +65,23 @@ public class JFrameCadProduto extends javax.swing.JFrame {
 
         lbTipo.setText("Tipo:");
 
-        jComboTipos.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboTipos.setModel(new javax.swing.DefaultComboBoxModel<>());
 
         btnSalvar.setText("Salvar");
+        btnSalvar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSalvarActionPerformed(evt);
+            }
+        });
 
         btnLimpar.setText("Limpar");
+
+        btnNovoTipo.setText("Novo");
+        btnNovoTipo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNovoTipoActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -77,7 +106,11 @@ public class JFrameCadProduto extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(lbTipo)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jComboTipos, 0, 145, Short.MAX_VALUE))))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(btnNovoTipo)
+                                        .addGap(0, 0, Short.MAX_VALUE))
+                                    .addComponent(jComboTipos, 0, 145, Short.MAX_VALUE)))))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(btnLimpar)
@@ -102,7 +135,9 @@ public class JFrameCadProduto extends javax.swing.JFrame {
                     .addComponent(lbPreco)
                     .addComponent(lbTipo)
                     .addComponent(jComboTipos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 62, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnNovoTipo)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSalvar)
                     .addComponent(btnLimpar))
@@ -112,6 +147,68 @@ public class JFrameCadProduto extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
+       
+        if(fieldsEmpty())
+        {
+            JOptionPane.showMessageDialog(this,"Preencha todos os campos para o cadastro de um produto!", "Campos Vazio!", 0);
+            
+            String tipo = (String) jComboTipos.getSelectedItem();
+            
+            ArrayList<Produto> list = ProdutoDAO.queryAll();
+            
+            int id = 0;
+            if( !list.isEmpty() )
+                id = list.get(list.size()-1).getId() + 1;
+                    
+            ProdutoDAO.insert(new Produto(id,txtDescricao.getText(),Double.parseDouble(txtPreco.getText()), lista_tipos.get(tipo)));
+        }
+        else 
+        {
+            JOptionPane.showMessageDialog(this,"Produto Cadastrado com Sucesso!", "Cadastro de Produto", 1);
+
+        }
+    }//GEN-LAST:event_btnSalvarActionPerformed
+
+    private void btnNovoTipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoTipoActionPerformed
+       
+        String descricao = JOptionPane.showInputDialog("Insira o Novo Tipo");
+        
+        ArrayList<TipoProduto> list = TipoProdutoDAO.queryAll();
+        
+        int id = 0;
+        
+        if(!list.isEmpty())
+            id = list.get(list.size()-1).getId();
+        
+        TipoProdutoDAO.insert(new TipoProduto(id,descricao));
+       
+        
+    }//GEN-LAST:event_btnNovoTipoActionPerformed
+
+    private void fillCombo()
+    {
+        ArrayList<TipoProduto> tipos = TipoProdutoDAO.queryAll();
+        
+        System.out.println(tipos);
+        if(!tipos.isEmpty())
+        {
+            for(TipoProduto tipo : tipos)
+                lista_tipos.put(tipo.getDescricao(), tipo);
+
+            jComboTipos.setModel(new DefaultComboBoxModel(tipos.toArray()));
+        }
+    }
+    private boolean fieldsEmpty()
+    {
+        if(txtID.getText().equals("") || txtDescricao.getText().equals("") ||
+                txtPreco.getText().equals(""))
+            return true;
+        else
+            return false;
+            
+        
+    }
     /**
      * @param args the command line arguments
      */
@@ -139,7 +236,8 @@ public class JFrameCadProduto extends javax.swing.JFrame {
         }
         //</editor-fold>
         //</editor-fold>
-
+        
+      
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -150,6 +248,7 @@ public class JFrameCadProduto extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnLimpar;
+    private javax.swing.JButton btnNovoTipo;
     private javax.swing.JButton btnSalvar;
     private javax.swing.JComboBox<String> jComboTipos;
     private javax.swing.JLabel lbDescricao;

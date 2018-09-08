@@ -5,6 +5,8 @@
  */
 package view;
 
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author rodrigo
@@ -88,6 +90,11 @@ public class JFrameCadPedido extends javax.swing.JFrame {
         jComboFormaPgto.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         btnSalvar.setText("Registrar");
+        btnSalvar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSalvarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -200,6 +207,31 @@ public class JFrameCadPedido extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
+        
+        if(fieldsEmpty())
+        {
+                     JOptionPane.showMessageDialog(this,"Produto Cadastrado com Sucesso!", "Cadastro de Produto", 1);
+                     
+        }
+        else 
+        {
+            JOptionPane.showMessageDialog(this,"Produto Cadastrado com Sucesso!", "Cadastro de Produto", 1);
+
+        }
+    }//GEN-LAST:event_btnSalvarActionPerformed
+
+    private boolean fieldsEmpty()
+    {
+        if(txtCliente.getText().equals("") || txtData.getText().equals("") ||
+                txtDesconto.getText().equals("") || txtProduto.getText().equals("") ||
+                txtSubTotal.getText().equals("") || txtTotal.getText().equals("") ||
+                txtTroco.getText().equals(""))
+            return true;
+        else
+            return false;
+    }
+    
     /**
      * @param args the command line arguments
      */

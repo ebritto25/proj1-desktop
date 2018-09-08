@@ -99,7 +99,7 @@ public class Database {
 			FileManager.writeFile(fileTipoProduto, iniciais);
 		}
 		
-		return fileProdutos;
+		return fileTipoProduto;
 	}
 	
 	public File getDatabaseTipoPagamento() throws IOException

@@ -69,13 +69,16 @@ public class ClienteDAO {
 		if(connect())
 		{
 			String[] registros = FileManager.readFile(db).split("\n");
-			if(registros.length > 0)
+                        
+                        
+			if(registros.length > 0 && !registros[0].equals(""))
 			{
 				for(String r : registros)
 				{
 					clientes.add(new Cliente(r));
 				}
 			}
+                        
 		}
 				
 		return clientes;

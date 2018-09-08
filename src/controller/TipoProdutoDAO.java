@@ -60,13 +60,15 @@ public class TipoProdutoDAO {
 	
 	public static ArrayList<TipoProduto> queryAll()
 	{
-		ArrayList<TipoProduto> encontrados = new ArrayList<>();
+		
+                ArrayList<TipoProduto> encontrados = new ArrayList<>();
 		
 		if(connect())
 		{
 			String dados = FileManager.readFile(db);
+                        
 			String[] registros = dados.split(",");
-			
+                      
 			for(String registro : registros)
 			{
 				encontrados.add(new TipoProduto(registro));
