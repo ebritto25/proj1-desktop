@@ -191,12 +191,16 @@ public class JFrameCadProduto extends javax.swing.JFrame {
         ArrayList<TipoProduto> tipos = TipoProdutoDAO.queryAll();
         
         System.out.println(tipos);
-        if(!tipos.isEmpty())
+		if(!tipos.isEmpty())
         {
             for(TipoProduto tipo : tipos)
                 lista_tipos.put(tipo.getDescricao(), tipo);
-
-            jComboTipos.setModel(new DefaultComboBoxModel(tipos.toArray()));
+			
+			TipoProduto[] tipos_arr = tipos.toArray(new TipoProduto[tipos.size()]);
+            
+			DefaultComboBoxModel model = new DefaultComboBoxModel(tipos_arr); 
+			
+			jComboTipos.setModel(model);
         }
     }
     private boolean fieldsEmpty()

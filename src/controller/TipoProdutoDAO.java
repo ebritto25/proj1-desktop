@@ -67,7 +67,7 @@ public class TipoProdutoDAO {
 		{
 			String dados = FileManager.readFile(db);
                         
-			String[] registros = dados.split(",");
+			String[] registros = dados.split("\n");
                       
 			for(String registro : registros)
 			{

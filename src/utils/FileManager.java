@@ -19,7 +19,7 @@ public class FileManager {
 			buffReader = new BufferedReader(new FileReader(file));
 			while(buffReader.ready())
 			{
-				text.append(buffReader.readLine());
+				text.append(buffReader.readLine()+"\n");
 			}
 			buffReader.close();
 		}

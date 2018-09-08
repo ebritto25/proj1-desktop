@@ -11,7 +11,7 @@ public class TipoProduto {
 	{
 		String[] dados = TipoProduto.split(",");
                
-    		this.id = Integer.parseInt(dados[0]);
+    	this.id = Integer.parseInt(dados[0]);
 		this.descricao = dados[1];
 	}
 	
