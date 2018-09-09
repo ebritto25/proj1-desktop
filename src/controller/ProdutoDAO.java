@@ -85,7 +85,9 @@ public class ProdutoDAO {
 			
 			for(String registro : registros)
 			{
-				produtos.add(produtoBuilder(registro));
+				Produto prod = produtoBuilder(registro);
+				if(prod != null)
+					produtos.add(prod);
 			}
 		}
 		
@@ -110,7 +112,11 @@ public class ProdutoDAO {
 				String r_desc = r_dados[1];
 				
 				if(r_desc.contains(descricao))
-					encontrados.add(produtoBuilder(registro));
+				{
+					Produto prod = produtoBuilder(registro);
+					if(prod != null)
+						encontrados.add(prod);
+				}
 			}
 		}
 		

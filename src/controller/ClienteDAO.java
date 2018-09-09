@@ -85,6 +85,31 @@ public class ClienteDAO {
 		return clientes;
 	}
 	
+	public static ArrayList<Cliente> queryByNome(String nome)
+	{
+		ArrayList<Cliente> encontrados = new ArrayList<>();
+		
+		if(connect())
+		{
+			String dados = FileManager.readFile(db);
+			String[] registros = dados.split("\n");
+			
+			if(registros[0].equals(""))
+				return encontrados;
+			
+			for(String registro : registros)
+			{
+				String[] r_dados = registro.split(",");
+				String r_nome = r_dados[1];
+				
+				if(r_nome.contains(nome))
+					encontrados.add(new Cliente(registro));
+			}
+		}
+		
+		return encontrados;
+	}
+	
 	public static boolean delete(Cliente cli)
 	{
 		if(connect())

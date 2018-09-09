@@ -45,6 +45,9 @@ public class TipoProdutoDAO {
 			String dados = FileManager.readFile(db);
 			String[] registros = dados.split("\n");
 			
+			if(registros[0].equals(""))
+				return null;
+			
 			for(String registro : registros)
 			{
 				String[] dadosRegistro = registro.split(",");
@@ -65,10 +68,12 @@ public class TipoProdutoDAO {
 		
 		if(connect())
 		{
-			String dados = FileManager.readFile(db);
-                        
+			String dados = FileManager.readFile(db);                  
 			String[] registros = dados.split("\n");
                       
+			if(registros[0].equals(""))
+				return encontrados;
+			
 			for(String registro : registros)
 			{
 				encontrados.add(new TipoProduto(registro));

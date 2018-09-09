@@ -43,6 +43,9 @@ public class TipoPagamentoDAO {
 			String dados = FileManager.readFile(db);
 			String[] registros = dados.split("\n");
 			
+			if(registros[0].equals(""))
+				return null;
+			
 			for(String registro : registros)
 			{
 				String[] r_dados = registro.split(",");
@@ -63,6 +66,9 @@ public class TipoPagamentoDAO {
 		{
 			String dados = FileManager.readFile(db);
 			String[] registros = dados.split("\n");
+			
+			if(registros[0].equals(""))
+				return encontrados;
 			
 			for(String registro : registros)
 			{
