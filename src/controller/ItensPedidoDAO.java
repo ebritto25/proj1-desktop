@@ -73,6 +73,9 @@ public class ItensPedidoDAO {
 			String dados = FileManager.readFile(db);
 			String[] registros = dados.split("\n");
 			
+			if(!registros[0].equals(""))
+				return null;
+			
 			for(String registro : registros)
 			{
 				String[] r_dados = registro.split(",");
