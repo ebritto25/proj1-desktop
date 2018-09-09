@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import model.Produto;
 import model.TipoProduto;
@@ -35,6 +36,8 @@ public class JFrameCadProduto extends javax.swing.JFrame {
         
         txtID.setVisible(false);
         lbID.setVisible(false);
+        
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
 
     /**

@@ -5,31 +5,29 @@
  */
 package view;
 
-import javax.swing.JFrame;
 import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author rodrigo
  */
-public class JFrameListaCliente extends javax.swing.JFrame {
+public class jDialogTabela extends javax.swing.JDialog {
 
     /**
-     * Creates new form JFrameListaCliente
+     * Creates new form Tabela
      */
     private int id;
     
-    public JFrameListaCliente()
-    {
+    public jDialogTabela(java.awt.Frame parent, boolean modal) {
+        super(parent, modal);
         initComponents();
     }
-    public JFrameListaCliente(DefaultTableModel tableModel) {
+    public jDialogTabela(java.awt.Frame parent, boolean modal,DefaultTableModel tablemodel) {
+        super(parent, modal);
         initComponents();
-        listaClientes.setModel(tableModel);
         
-        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        jTableValores.setModel(tablemodel);
     }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -40,14 +38,12 @@ public class JFrameListaCliente extends javax.swing.JFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        listaClientes = new javax.swing.JTable();
+        jTableValores = new javax.swing.JTable();
         btnSelecionar = new javax.swing.JButton();
-        btnBuscar = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(400, 400));
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        listaClientes.setModel(new javax.swing.table.DefaultTableModel(
+        jTableValores.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -57,16 +53,8 @@ public class JFrameListaCliente extends javax.swing.JFrame {
             new String [] {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        jScrollPane1.setViewportView(listaClientes);
+        ));
+        jScrollPane1.setViewportView(jTableValores);
 
         btnSelecionar.setText("Selecionar");
         btnSelecionar.addActionListener(new java.awt.event.ActionListener() {
@@ -74,8 +62,6 @@ public class JFrameListaCliente extends javax.swing.JFrame {
                 btnSelecionarActionPerformed(evt);
             }
         });
-
-        btnBuscar.setText("Buscar");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -86,21 +72,17 @@ public class JFrameListaCliente extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(btnBuscar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnSelecionar))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 375, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 439, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 292, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 326, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnSelecionar)
-                    .addComponent(btnBuscar))
+                .addComponent(btnSelecionar)
                 .addContainerGap())
         );
 
@@ -108,23 +90,21 @@ public class JFrameListaCliente extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSelecionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelecionarActionPerformed
-       int row = listaClientes.getSelectedRow();
        
-       id = (int) listaClientes.getValueAt(row, 0);
-       
-       setVisible(false);
-       dispose();
-       
+        int row = jTableValores.getSelectedRow();
+        
+        id = (int) jTableValores.getValueAt(row, 0);
+        
+        setVisible(false);
+        dispose();
     }//GEN-LAST:event_btnSelecionarActionPerformed
-
+    
     public int getID() { return id; }
-    public int showWindow(int id)
+    public int showWindow()
     {
         setVisible(true);
-        System.out.println("FUNCIONA"+id);
         return getID();
     }
-    
     /**
      * @param args the command line arguments
      */
@@ -142,29 +122,35 @@ public class JFrameListaCliente extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(JFrameListaCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(jDialogTabela.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(JFrameListaCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(jDialogTabela.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(JFrameListaCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(jDialogTabela.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(JFrameListaCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(jDialogTabela.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
         //</editor-fold>
 
-        /* Create and display the form */
+        /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new JFrameListaCliente().setVisible(true);
+                jDialogTabela dialog = new jDialogTabela(new javax.swing.JFrame(), true);
+                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+                    @Override
+                    public void windowClosing(java.awt.event.WindowEvent e) {
+                        System.exit(0);
+                    }
+                });
+                dialog.setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnSelecionar;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable listaClientes;
+    private javax.swing.JTable jTableValores;
     // End of variables declaration//GEN-END:variables
 }

@@ -8,6 +8,7 @@ package view;
 import controller.ClienteDAO;
 import java.awt.Component;
 import java.util.ArrayList;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -40,6 +41,9 @@ public class JFrameCadCliente extends javax.swing.JFrame {
             disableFields();
         
         fillFields();
+        
+        
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
     
     public JFrameCadCliente() {
@@ -49,6 +53,8 @@ public class JFrameCadCliente extends javax.swing.JFrame {
         lbID.setVisible(false);
        
         mode = Mode.INSERT;
+        
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
 
     /**
