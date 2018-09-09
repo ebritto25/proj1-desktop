@@ -29,9 +29,12 @@ public class JFrameCadProduto extends javax.swing.JFrame {
         
         lista_tipos = new HashMap<String,TipoProduto>();
         
-        fillCombo();
         
         initComponents();
+        fillCombo();
+        
+        txtID.setVisible(false);
+        lbID.setVisible(false);
     }
 
     /**
@@ -152,6 +155,9 @@ public class JFrameCadProduto extends javax.swing.JFrame {
         if(fieldsEmpty())
         {
             JOptionPane.showMessageDialog(this,"Preencha todos os campos para o cadastro de um produto!", "Campos Vazio!", 0);
+        }
+        else 
+        {
             
             String tipo = (String) jComboTipos.getSelectedItem();
             
@@ -162,9 +168,7 @@ public class JFrameCadProduto extends javax.swing.JFrame {
                 id = list.get(list.size()-1).getId() + 1;
                     
             ProdutoDAO.insert(new Produto(id,txtDescricao.getText(),Double.parseDouble(txtPreco.getText()), lista_tipos.get(tipo)));
-        }
-        else 
-        {
+            
             JOptionPane.showMessageDialog(this,"Produto Cadastrado com Sucesso!", "Cadastro de Produto", 1);
 
         }
@@ -183,7 +187,7 @@ public class JFrameCadProduto extends javax.swing.JFrame {
         
         TipoProdutoDAO.insert(new TipoProduto(id,descricao));
        
-        
+        fillCombo();    
     }//GEN-LAST:event_btnNovoTipoActionPerformed
 
     private void fillCombo()
@@ -191,22 +195,18 @@ public class JFrameCadProduto extends javax.swing.JFrame {
         ArrayList<TipoProduto> tipos = TipoProdutoDAO.queryAll();
         
         System.out.println(tipos);
-		if(!tipos.isEmpty())
+        if(!tipos.isEmpty())
         {
             for(TipoProduto tipo : tipos)
                 lista_tipos.put(tipo.getDescricao(), tipo);
-			
-			TipoProduto[] tipos_arr = tipos.toArray(new TipoProduto[tipos.size()]);
-            
-			DefaultComboBoxModel model = new DefaultComboBoxModel(tipos_arr); 
-			
-			jComboTipos.setModel(model);
+		
+        
+            jComboTipos.setModel(new DefaultComboBoxModel(lista_tipos.keySet().toArray()));
         }
     }
     private boolean fieldsEmpty()
     {
-        if(txtID.getText().equals("") || txtDescricao.getText().equals("") ||
-                txtPreco.getText().equals(""))
+        if(txtDescricao.getText().equals("") || txtPreco.getText().equals(""))
             return true;
         else
             return false;

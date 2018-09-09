@@ -67,13 +67,12 @@ public class ProdutoDAO {
 			String dados = FileManager.readFile(db);
 			String[] registros = dados.split("\n");
 			
-			for(String registro : registros)
-			{
-				String[] r_dados = registro.split(",");
-				TipoProduto tProduto = TipoProdutoDAO.queryByID(Integer.parseInt(r_dados[0]));
-				produtos.add(new Produto(registro,tProduto));
-			}
-			
+                        for(String registro : registros)
+                        {
+                                String[] r_dados = registro.split(",");
+                                TipoProduto tProduto = TipoProdutoDAO.queryByID(Integer.parseInt(r_dados[0]));
+                                produtos.add(new Produto(registro,tProduto));
+                        }
 		}
 		
 		return produtos;

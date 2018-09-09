@@ -5,7 +5,17 @@
  */
 package view;
 
+import controller.PedidoDAO;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import model.Cliente;
+import model.Pedido;
+import model.TipoPagamento;
 
 /**
  *
@@ -16,6 +26,10 @@ public class JFrameCadPedido extends javax.swing.JFrame {
     /**
      * Creates new form JFrameCadPedido
      */
+    
+    private Cliente cliente;
+    private TipoPagamento tipoPagamento;
+    
     public JFrameCadPedido() {
         initComponents();
     }
@@ -63,6 +77,11 @@ public class JFrameCadPedido extends javax.swing.JFrame {
         lbCliente.setText("Cliente:");
 
         btnBuscarCliente.setText("Buscar");
+        btnBuscarCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarClienteActionPerformed(evt);
+            }
+        });
 
         lbFormaPgto.setText("Forma de Pagamento:");
 
@@ -211,15 +230,40 @@ public class JFrameCadPedido extends javax.swing.JFrame {
         
         if(fieldsEmpty())
         {
-                     JOptionPane.showMessageDialog(this,"Produto Cadastrado com Sucesso!", "Cadastro de Produto", 1);
-                     
+            JOptionPane.showMessageDialog(this,"Preencha todos os campos para o registro do pedido!", "Campos Vazio!", 0);
         }
         else 
         {
-            JOptionPane.showMessageDialog(this,"Produto Cadastrado com Sucesso!", "Cadastro de Produto", 1);
+            ArrayList<Pedido> list = PedidoDAO.queryAll();
+            
+            int id = 0;
+            if( !list.isEmpty() )
+                id = list.get( list.size() - 1 ).getId();
+            
+            SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+            Date data = new Date();        
+            
+            try {
+                data = formato.parse(txtData.getText());
+            } catch (ParseException ex) {
+                Logger.getLogger(JFrameCadPedido.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            
+            PedidoDAO.insert(new Pedido(id,data,cliente,Double.parseDouble(txtTotal.getText()),Double.parseDouble(txtDesconto.getText()),
+            tipoPagamento,Double.parseDouble(txtTroco.getText()),Double.parseDouble(txtSubTotal.getText())));
+            
+            JOptionPane.showMessageDialog(this,"Pedido Registrado com Sucesso!", "Registro de Pedido", 1);
 
         }
     }//GEN-LAST:event_btnSalvarActionPerformed
+
+    private void btnBuscarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarClienteActionPerformed
+        String nome = JOptionPane.showInputDialog("Informe o nome do cliente:");
+        
+        // Query por Nome
+        
+    }//GEN-LAST:event_btnBuscarClienteActionPerformed
 
     private boolean fieldsEmpty()
     {

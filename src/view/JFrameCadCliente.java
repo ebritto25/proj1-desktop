@@ -23,6 +23,10 @@ public class JFrameCadCliente extends javax.swing.JFrame {
      * Creates new form JFrameCadCliente
      */
     
+    public JFrameCadCliente(String cliente)
+    {
+        initComponents();
+    }
     
     public JFrameCadCliente() {
       
