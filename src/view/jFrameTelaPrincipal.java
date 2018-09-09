@@ -6,6 +6,8 @@
 package view;
 
 import javax.swing.JOptionPane;
+import model.Cliente;
+import utils.Mode;
 
 /**
  *
@@ -59,6 +61,11 @@ public class jFrameTelaPrincipal extends javax.swing.JFrame {
         menuCliente.add(menuEditCliente);
 
         menuDelCliente.setText("Excluir");
+        menuDelCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuDelClienteActionPerformed(evt);
+            }
+        });
         menuCliente.add(menuDelCliente);
 
         jMenuBar1.add(menuCliente);
@@ -80,10 +87,21 @@ public class jFrameTelaPrincipal extends javax.swing.JFrame {
 
     private void menuEditClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuEditClienteActionPerformed
        
-        String cliente = JOptionPane.showInputDialog("Informe o nome do cliente: ");
-        
+        String nome = JOptionPane.showInputDialog("Informe o nome do cliente: ");
+        // Query por nome
+        Cliente cliente = new Cliente();
+        JFrameCadCliente janela = new JFrameCadCliente(cliente,Mode.EDIT);
+        janela.setVisible(true);
         
     }//GEN-LAST:event_menuEditClienteActionPerformed
+
+    private void menuDelClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuDelClienteActionPerformed
+        String nome = JOptionPane.showInputDialog("Informe o nome do cliente: ");
+        // Query por nome
+        Cliente cliente = new Cliente();
+        JFrameCadCliente janela = new JFrameCadCliente(cliente,Mode.DELETE);
+        janela.setVisible(true);
+    }//GEN-LAST:event_menuDelClienteActionPerformed
 
     /**
      * @param args the command line arguments

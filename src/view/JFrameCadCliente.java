@@ -12,6 +12,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import model.Cliente;
+import utils.Mode;
 
 /**
  *
@@ -19,13 +20,26 @@ import model.Cliente;
  */
 public class JFrameCadCliente extends javax.swing.JFrame {
 
-    /**
-     * Creates new form JFrameCadCliente
-     */
     
-    public JFrameCadCliente(String cliente)
+    
+    private Mode mode;
+    private Cliente atual;
+    
+    public JFrameCadCliente(Cliente cliente,Mode _mode)
     {
         initComponents();
+        
+        txtID.setEnabled(false);
+     
+      
+        mode = _mode;
+        
+        atual = cliente;
+        
+        if( mode == Mode.DELETE )
+            disableFields();
+        
+        fillFields();
     }
     
     public JFrameCadCliente() {
@@ -33,6 +47,8 @@ public class JFrameCadCliente extends javax.swing.JFrame {
         initComponents();
         txtID.setVisible(false);
         lbID.setVisible(false);
+       
+        mode = Mode.INSERT;
     }
 
     /**
@@ -229,23 +245,40 @@ public class JFrameCadCliente extends javax.swing.JFrame {
                 id = list.get( list.size() - 1).getId() + 1;
             
             String end = txtEndereco.getText() + " " + txtComplemento.getText();
-            ClienteDAO.insert(new Cliente(id,txtNome.getText(),txtTelefone.getText(),end,txtBairro.getText(),txtCep.getText()));
-            JOptionPane.showMessageDialog(this,"Cliente Cadastrado com Sucesso!", "Cadastrdo de Cliente", 1);
+            
+            if( mode == Mode.INSERT )
+            {
+                ClienteDAO.insert(new Cliente(id,txtNome.getText(),txtTelefone.getText(),end,txtBairro.getText(),txtCep.getText()));
+                JOptionPane.showMessageDialog(this,"Cliente Cadastrado com Sucesso!", "Cadastrdo de Cliente", 1);
+            }
+            else if( mode == Mode.EDIT )
+            {
+                ClienteDAO.update(atual,new Cliente(id,txtNome.getText(),txtTelefone.getText(),end,txtBairro.getText(),txtCep.getText()));
+                JOptionPane.showMessageDialog(this,"Cliente atualizado com Sucesso!", "Edição de Cliente", 1);
+            }
+            else
+            {
+                ClienteDAO.delete(atual);
+                JOptionPane.showMessageDialog(this,"Cliente excluido com Sucesso!", "Exclusão de Cliente", 1);
 
+            }
         }
         
     }//GEN-LAST:event_btnSalvarActionPerformed
 
     private void btnLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparActionPerformed
-       txtID.setText("");
-       txtNome.setText("");
-       txtCep.setText("");
-       txtEndereco.setText("");
-       txtComplemento.setText("");
-       txtTelefone.setText("");
-       txtBairro.setText("");
-       txtID.setText("");
-       txtNumero.setText("");
+     
+
+        txtID.setText("");
+        txtNome.setText("");
+        txtCep.setText("");
+        txtEndereco.setText("");
+        txtComplemento.setText("");
+        txtTelefone.setText("");
+        txtBairro.setText("");
+        txtID.setText("");
+        txtNumero.setText("");
+
     }//GEN-LAST:event_btnLimparActionPerformed
 
     private void txtNumeroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNumeroActionPerformed
@@ -256,7 +289,7 @@ public class JFrameCadCliente extends javax.swing.JFrame {
     {
         if(txtNome.getText().equals("") || txtTelefone.getText().equals("")  ||
            txtCep.getText().equals("")  || txtEndereco.getText().equals("")  ||
-           txtComplemento.getText().equals("") || txtTelefone.getText().equals("") ||
+           txtComplemento.getText().equals("") || txtNumero.getText().equals("") ||
            txtBairro.getText().equals("")
            )
         {
@@ -264,6 +297,32 @@ public class JFrameCadCliente extends javax.swing.JFrame {
         }
         else
             return false;
+    }
+    
+    
+    private void fillFields ()
+    {
+        txtNome.setText(atual.getNome());
+        txtTelefone.setText(atual.getTelefone());
+        txtEndereco.setText(atual.getEndereco());
+        txtCep.setText(atual.getCep());
+        txtBairro.setText(atual.getBairro());
+        txtID.setText(Integer.toString(atual.getId()));
+    }
+    
+    
+    private void disableFields()
+    {
+       btnLimpar.setEnabled(false);
+       txtID.setEnabled(false);
+       txtNome.setEnabled(false);
+       txtCep.setEnabled(false);
+       txtEndereco.setEnabled(false);
+       txtComplemento.setEnabled(false);
+       txtTelefone.setEnabled(false);
+       txtBairro.setEnabled(false);
+       txtID.setEnabled(false);
+       txtNumero.setEnabled(false);
     }
     /**
      * @param args the command line arguments

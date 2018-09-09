@@ -194,7 +194,7 @@ public class JFrameCadProduto extends javax.swing.JFrame {
     {
         ArrayList<TipoProduto> tipos = TipoProdutoDAO.queryAll();
         
-        System.out.println(tipos);
+        
         if(!tipos.isEmpty())
         {
             for(TipoProduto tipo : tipos)
