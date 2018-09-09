@@ -26,6 +26,17 @@ public class ProdutoDAO {
 		return true;
 	}
 	
+	private static Produto produtoBuilder(String registro)
+	{
+		String [] r_dados = registro.split(",");
+		TipoProduto tProduto = TipoProdutoDAO.queryByID(Integer.parseInt(r_dados[3]));
+		
+		if(tProduto != null)
+			return new Produto(registro,tProduto);
+		else
+			return null;
+	}
+	
 	public static boolean insert(Produto p)
 	{
 		if(connect())
@@ -43,14 +54,16 @@ public class ProdutoDAO {
 			String dados = FileManager.readFile(db);
 			String[] registros = dados.split("\n");
 			
+			if(registros[0].equals(""))
+				return null;
+			
 			for(String registro : registros)
 			{
 				String[] r_dados = registro.split(",");
 				int r_id = Integer.parseInt(r_dados[0]);
 				if(r_id == id)
 				{
-					TipoProduto tProduto = TipoProdutoDAO.queryByID(Integer.parseInt(r_dados[3]));
-					return new Produto(registro,tProduto);
+					return produtoBuilder(registro);
 				}
 					
 			}
@@ -67,15 +80,41 @@ public class ProdutoDAO {
 			String dados = FileManager.readFile(db);
 			String[] registros = dados.split("\n");
 			
-                        for(String registro : registros)
-                        {
-                                String[] r_dados = registro.split(",");
-                                TipoProduto tProduto = TipoProdutoDAO.queryByID(Integer.parseInt(r_dados[0]));
-                                produtos.add(new Produto(registro,tProduto));
-                        }
+			if(registros[0].equals(""))
+				return produtos;
+			
+			for(String registro : registros)
+			{
+				produtos.add(produtoBuilder(registro));
+			}
 		}
 		
 		return produtos;
+	}
+	
+	public static ArrayList<Produto> queryByDescricao(String descricao)
+	{
+		ArrayList<Produto> encontrados = new ArrayList<>();
+		
+		if(connect())
+		{
+			String dados = FileManager.readFile(db);
+			String[] registros = dados.split("\n");
+			
+			if(registros[0].equals(""))
+				return encontrados;
+			
+			for(String registro : registros)
+			{
+				String[] r_dados = registro.split(",");
+				String r_desc = r_dados[1];
+				
+				if(r_desc.contains(descricao))
+					encontrados.add(produtoBuilder(registro));
+			}
+		}
+		
+		return encontrados;
 	}
 	
 	public static boolean delete(Produto prod)

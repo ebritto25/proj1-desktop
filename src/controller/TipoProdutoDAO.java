@@ -61,7 +61,7 @@ public class TipoProdutoDAO {
 	public static ArrayList<TipoProduto> queryAll()
 	{
 		
-                ArrayList<TipoProduto> encontrados = new ArrayList<>();
+        ArrayList<TipoProduto> encontrados = new ArrayList<>();
 		
 		if(connect())
 		{
@@ -72,6 +72,31 @@ public class TipoProdutoDAO {
 			for(String registro : registros)
 			{
 				encontrados.add(new TipoProduto(registro));
+			}
+		}
+		
+		return encontrados;
+	}
+	
+	public static ArrayList<TipoProduto> queryByDescricao(String descricao)
+	{
+		ArrayList<TipoProduto> encontrados = new ArrayList<>();
+		
+		if(connect())
+		{
+			String dados = FileManager.readFile(db);
+			String[] registros = dados.split("\n");
+			
+			if(registros[0].equals(""))
+				return encontrados;
+			
+			for(String registro : registros)
+			{
+				String[] r_dados = registro.split(",");
+				String r_desc = r_dados[1];
+				
+				if(r_desc.contains(descricao))
+					encontrados.add(new TipoProduto(registro));
 			}
 		}
 		

@@ -73,6 +73,32 @@ public class TipoPagamentoDAO {
 		return encontrados;
 	}
 	
+	public static ArrayList<TipoPagamento> queryByDescricao(String descricao)
+	{
+		ArrayList<TipoPagamento> encontrados = new ArrayList<>();
+		
+		if(connect())
+		{
+			String dados = FileManager.readFile(db);
+			String[] registros = dados.split("\n");
+			
+			if(registros[0].equals(""))
+				return encontrados;
+			
+			for(String registro : registros)
+			{
+				String[] r_dados = registro.split(",");
+				String r_desc = r_dados[1];
+				
+				if(r_desc.contains(descricao))
+					encontrados.add(new TipoPagamento(registro));
+				
+			}
+		}
+		
+		return encontrados;
+	}
+	
 	public static boolean delete(TipoPagamento tp)
 	{
 		if(connect())

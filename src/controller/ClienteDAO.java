@@ -47,16 +47,18 @@ public class ClienteDAO {
 		if(connect())
 		{
 			String[] registros = FileManager.readFile(db).split("\n");
-			if(registros.length > 0)
+			
+			if(registros[0].equals(""))
+				return null;
+			
+			for(String r : registros)
 			{
-				for(String r : registros)
-				{
-					String[] dadosCliente = r.split(",");
-					int r_id = Integer.parseInt(dadosCliente[0]);
-					if(id == r_id)
-						return new Cliente(r);
-				}
+				String[] dadosCliente = r.split(",");
+				int r_id = Integer.parseInt(dadosCliente[0]);
+				if(id == r_id)
+					return new Cliente(r);
 			}
+			
 		}
 		
 		return null;
@@ -69,16 +71,15 @@ public class ClienteDAO {
 		if(connect())
 		{
 			String[] registros = FileManager.readFile(db).split("\n");
-                        
-                        
-			if(registros.length > 0 && !registros[0].equals(""))
+                                              
+			if(registros[0].equals(""))
+				return clientes;
+
+			for(String r : registros)
 			{
-				for(String r : registros)
-				{
-					clientes.add(new Cliente(r));
-				}
+				clientes.add(new Cliente(r));
 			}
-                        
+                       
 		}
 				
 		return clientes;
