@@ -5,7 +5,23 @@
  */
 package view;
 
+import controller.ClienteDAO;
+import controller.PedidoDAO;
+import controller.TipoPagamentoDAO;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
+import model.Cliente;
+import model.Pedido;
+import model.TipoPagamento;
+import utils.Mode;
 
 /**
  *
@@ -16,8 +32,37 @@ public class JFrameCadPedido extends javax.swing.JFrame {
     /**
      * Creates new form JFrameCadPedido
      */
-    public JFrameCadPedido() {
+    
+    private Cliente cliente;
+    private Map<String,TipoPagamento> formaPgto;
+    
+    private Pedido atual;
+    private Mode mode;
+    
+    public JFrameCadPedido(Pedido pedido, Mode _mode)
+    {
+        mode = _mode;
+        atual = pedido;
+        
         initComponents();
+
+        txtID.setVisible(true);
+        txtID.setEnabled(false);
+        lbID.setVisible(true);
+        
+        
+        fillFields();
+        
+        if( mode == Mode.DELETE )
+            disableFields();
+        
+        
+    }
+    
+    public JFrameCadPedido() {
+        formaPgto = new HashMap<String,TipoPagamento>();
+        initComponents();
+        fillCombo();
     }
 
     /**
@@ -63,15 +108,25 @@ public class JFrameCadPedido extends javax.swing.JFrame {
         lbCliente.setText("Cliente:");
 
         btnBuscarCliente.setText("Buscar");
+        btnBuscarCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarClienteActionPerformed(evt);
+            }
+        });
 
         lbFormaPgto.setText("Forma de Pagamento:");
 
         lbProduto.setText("Produto:");
 
         btnBuscarProduto.setText("Buscar");
+        btnBuscarProduto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarProdutoActionPerformed(evt);
+            }
+        });
 
         listaProdutos.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            String[] strings;
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
@@ -211,27 +266,108 @@ public class JFrameCadPedido extends javax.swing.JFrame {
         
         if(fieldsEmpty())
         {
-                     JOptionPane.showMessageDialog(this,"Produto Cadastrado com Sucesso!", "Cadastro de Produto", 1);
-                     
+            JOptionPane.showMessageDialog(this,"Preencha todos os campos para o registro do pedido!", "Campos Vazio!", 0);
         }
         else 
         {
-            JOptionPane.showMessageDialog(this,"Produto Cadastrado com Sucesso!", "Cadastro de Produto", 1);
+            ArrayList<Pedido> list = PedidoDAO.queryAll();
+            
+            int id = 0;
+            if( !list.isEmpty() )
+                id = list.get( list.size() - 1 ).getId();
+            
+            SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+            Date data = new Date();        
+            
+            try {
+                data = formato.parse(txtData.getText());
+            } catch (ParseException ex) {
+                Logger.getLogger(JFrameCadPedido.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            
+            PedidoDAO.insert(new Pedido(id,data,cliente,Double.parseDouble(txtTotal.getText()),Double.parseDouble(txtDesconto.getText()),
+            formaPgto.get(jComboFormaPgto.getSelectedItem()),Double.parseDouble(txtTroco.getText()),Double.parseDouble(txtSubTotal.getText())));
+            
+            JOptionPane.showMessageDialog(this,"Pedido Registrado com Sucesso!", "Registro de Pedido", 1);
 
         }
     }//GEN-LAST:event_btnSalvarActionPerformed
+
+    private void btnBuscarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarClienteActionPerformed
+        
+        if( txtCliente.getText().equals("") )
+        {
+           JOptionPane.showMessageDialog(this,"Nenhum cliente informado!", "Campos Vazio!", 0);
+        }
+        else
+        {
+            // Query 
+        }
+    }//GEN-LAST:event_btnBuscarClienteActionPerformed
+
+    private void btnBuscarProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarProdutoActionPerformed
+        if( txtProduto.getText().equals("") )
+        {
+           JOptionPane.showMessageDialog(this,"Nenhum produto informado!", "Campos Vazio!", 0);
+        }
+        else
+        {
+            // Query 
+        }
+    }//GEN-LAST:event_btnBuscarProdutoActionPerformed
 
     private boolean fieldsEmpty()
     {
         if(txtCliente.getText().equals("") || txtData.getText().equals("") ||
                 txtDesconto.getText().equals("") || txtProduto.getText().equals("") ||
                 txtSubTotal.getText().equals("") || txtTotal.getText().equals("") ||
-                txtTroco.getText().equals(""))
+                txtTroco.getText().equals("") || listaProdutos.equals(null))
             return true;
         else
             return false;
     }
     
+    
+    
+    private void fillCombo()
+    {
+        ArrayList<TipoPagamento> formas = TipoPagamentoDAO.queryAll();
+        
+        if(!formas.isEmpty())
+        {
+            for(TipoPagamento forma : formas)
+                formaPgto.put(forma.getDescricao(), forma);
+            
+            
+            jComboFormaPgto.setModel(new DefaultComboBoxModel(formaPgto.keySet().toArray()));
+        }
+        
+        
+    }
+    
+    
+    private void fillFields()
+    {
+        txtID.setText(Integer.toString(atual.getId()));
+        txtCliente.setText(atual.getIdCliente().getNome());
+        txtData.setText(atual.getDataPedido().toString());
+        txtDesconto.setText(Double.toString(atual.getDesconto()));
+        txtSubTotal.setText(Double.toString(atual.getSubTotal()));
+        txtTotal.setText(Double.toString(atual.getTotal()));
+        txtTroco.setText(Double.toString(atual.getTroco()));
+    }
+    
+    private void disableFields()
+    {
+        txtID.setEnabled(false);
+        txtCliente.setEnabled(false);
+        txtData.setEnabled(false);
+        txtDesconto.setEnabled(false);
+        txtSubTotal.setEnabled(false);
+        txtTotal.setEnabled(false);
+        txtTroco.setEnabled(false);
+    }
     /**
      * @param args the command line arguments
      */
