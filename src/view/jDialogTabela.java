@@ -25,6 +25,7 @@ public class jDialogTabela extends javax.swing.JDialog {
     public jDialogTabela(java.awt.Frame parent, boolean modal,DefaultTableModel tablemodel) {
         super(parent, modal);
         initComponents();
+        id = -1;
         
         jTableValores.setModel(tablemodel);
     }

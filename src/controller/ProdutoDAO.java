@@ -15,12 +15,12 @@ public class ProdutoDAO {
 	private static boolean connect()
 	{
 		try{
-			db = Database.getInstance().getDatabaseProdutos();		
+                    db = Database.getInstance().getDatabaseProdutos();		
 		}
 		catch(IOException ex)
 		{
-			System.err.println(ex.getMessage());
-			return false;
+                    System.err.println(ex.getMessage());
+                    return false;
 		}
 		
 		return true;

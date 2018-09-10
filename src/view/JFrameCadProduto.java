@@ -72,6 +72,11 @@ public class JFrameCadProduto extends javax.swing.JFrame {
         lbTipo.setText("Tipo:");
 
         jComboTipos.setModel(new javax.swing.DefaultComboBoxModel<>());
+        jComboTipos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboTiposActionPerformed(evt);
+            }
+        });
 
         btnSalvar.setText("Salvar");
         btnSalvar.addActionListener(new java.awt.event.ActionListener() {
@@ -186,12 +191,16 @@ public class JFrameCadProduto extends javax.swing.JFrame {
         int id = 0;
         
         if(!list.isEmpty())
-            id = list.get(list.size()-1).getId();
+            id = list.get(list.size()-1).getId() + 1;
         
         TipoProdutoDAO.insert(new TipoProduto(id,descricao));
        
         fillCombo();    
     }//GEN-LAST:event_btnNovoTipoActionPerformed
+
+    private void jComboTiposActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboTiposActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboTiposActionPerformed
 
     private void fillCombo()
     {

@@ -5,7 +5,12 @@
  */
 package view;
 
+import controller.ClienteDAO;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 import model.Cliente;
 import utils.Mode;
 
@@ -37,9 +42,14 @@ public class jFrameTelaPrincipal extends javax.swing.JFrame {
         menuEditCliente = new javax.swing.JMenuItem();
         menuDelCliente = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
+        menuCadPedido = new javax.swing.JMenuItem();
+        menuEditPedido = new javax.swing.JMenuItem();
+        menuDelPedido = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setPreferredSize(new java.awt.Dimension(200, 200));
+        setResizable(false);
         getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.LINE_AXIS));
 
         menuCliente.setText("Clientes");
@@ -71,6 +81,16 @@ public class jFrameTelaPrincipal extends javax.swing.JFrame {
         jMenuBar1.add(menuCliente);
 
         jMenu2.setText("Pedidos");
+
+        menuCadPedido.setText("Cadastro");
+        jMenu2.add(menuCadPedido);
+
+        menuEditPedido.setText("Editar");
+        jMenu2.add(menuEditPedido);
+
+        menuDelPedido.setText("Excluir");
+        jMenu2.add(menuDelPedido);
+
         jMenuBar1.add(jMenu2);
 
         jMenu3.setText("Produtos");
@@ -88,19 +108,100 @@ public class jFrameTelaPrincipal extends javax.swing.JFrame {
     private void menuEditClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuEditClienteActionPerformed
        
         String nome = JOptionPane.showInputDialog("Informe o nome do cliente: ");
-        // Query por nome
-        Cliente cliente = new Cliente();
-        JFrameCadCliente janela = new JFrameCadCliente(cliente,Mode.EDIT);
-        janela.setVisible(true);
         
+        
+        ArrayList<Cliente> clientes = ClienteDAO.queryByNome(nome);
+
+        if(!clientes.isEmpty())
+        {
+            Map<Integer,Cliente> clis = new HashMap<Integer,Cliente>();
+
+            String col[] =  {"ID","Nome","Endereço","Telefone"};
+
+            DefaultTableModel tableModel = new DefaultTableModel(col,0);
+
+
+            jDialogTabela tabela = new jDialogTabela(this,true,tableModel);
+
+
+            for(Cliente cliente : clientes )
+            {
+                clis.put(cliente.getId(), cliente);
+
+                Object[] data = {cliente.getId(),cliente.getNome(),
+                    cliente.getEndereco(),cliente.getTelefone()};
+
+
+                tableModel.addRow(data);
+            }
+
+
+
+            int id = -1;
+
+            id = tabela.showWindow();
+
+            Cliente cli = clis.get(id);
+
+            if(id != -1)
+            {
+                JFrameCadCliente janela = new JFrameCadCliente(cli,Mode.EDIT);
+                janela.setVisible(true);
+            }
+            else
+                JOptionPane.showMessageDialog(rootPane,"Nenhum Cliente Selecionado!");
+        }
+        else
+            JOptionPane.showMessageDialog(rootPane, "Cliente Não encontrado!");
     }//GEN-LAST:event_menuEditClienteActionPerformed
 
     private void menuDelClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuDelClienteActionPerformed
         String nome = JOptionPane.showInputDialog("Informe o nome do cliente: ");
-        // Query por nome
-        Cliente cliente = new Cliente();
-        JFrameCadCliente janela = new JFrameCadCliente(cliente,Mode.DELETE);
-        janela.setVisible(true);
+        
+        
+        ArrayList<Cliente> clientes = ClienteDAO.queryByNome(nome);
+
+        if(!clientes.isEmpty())
+        {
+            Map<Integer,Cliente> clis = new HashMap<Integer,Cliente>();
+
+            String col[] =  {"ID","Nome","Endereço","Telefone"};
+
+            DefaultTableModel tableModel = new DefaultTableModel(col,0);
+
+
+            jDialogTabela tabela = new jDialogTabela(this,true,tableModel);
+
+
+            for(Cliente cliente : clientes )
+            {
+                clis.put(cliente.getId(), cliente);
+
+                Object[] data = {cliente.getId(),cliente.getNome(),
+                    cliente.getEndereco(),cliente.getTelefone()};
+
+
+                tableModel.addRow(data);
+            }
+
+
+
+            int id = -1;
+
+            id = tabela.showWindow();
+
+            Cliente cli = clis.get(id);
+
+            if(id != -1)
+            {
+                JFrameCadCliente janela = new JFrameCadCliente(cli,Mode.DELETE);
+                janela.setVisible(true);
+            }
+            else
+                JOptionPane.showMessageDialog(rootPane,"Nenhum Cliente Selecionado!");
+        }
+        else
+            JOptionPane.showMessageDialog(rootPane, "Cliente Não encontrado!");
     }//GEN-LAST:event_menuDelClienteActionPerformed
 
     /**
@@ -143,8 +244,11 @@ public class jFrameTelaPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem menuCadCliente;
+    private javax.swing.JMenuItem menuCadPedido;
     private javax.swing.JMenu menuCliente;
     private javax.swing.JMenuItem menuDelCliente;
+    private javax.swing.JMenuItem menuDelPedido;
     private javax.swing.JMenuItem menuEditCliente;
+    private javax.swing.JMenuItem menuEditPedido;
     // End of variables declaration//GEN-END:variables
 }

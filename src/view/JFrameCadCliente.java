@@ -38,8 +38,10 @@ public class JFrameCadCliente extends javax.swing.JFrame {
         atual = cliente;
         
         if( mode == Mode.DELETE )
+        {
+            this.btnSalvar.setText("Excluir");
             disableFields();
-        
+        }
         fillFields();
         
         
@@ -250,7 +252,7 @@ public class JFrameCadCliente extends javax.swing.JFrame {
             if( !list.isEmpty() )
                 id = list.get( list.size() - 1).getId() + 1;
             
-            String end = txtEndereco.getText() + " " + txtComplemento.getText();
+            String end = txtEndereco.getText() + ";" + txtComplemento.getText() + ";" + txtNumero.getText();
             
             if( mode == Mode.INSERT )
             {
@@ -259,7 +261,7 @@ public class JFrameCadCliente extends javax.swing.JFrame {
             }
             else if( mode == Mode.EDIT )
             {
-                ClienteDAO.update(atual,new Cliente(id,txtNome.getText(),txtTelefone.getText(),end,txtBairro.getText(),txtCep.getText()));
+                ClienteDAO.update(atual,new Cliente(atual.getId(),txtNome.getText(),txtTelefone.getText(),end,txtBairro.getText(),txtCep.getText()));
                 JOptionPane.showMessageDialog(this,"Cliente atualizado com Sucesso!", "Edição de Cliente", 1);
             }
             else
@@ -269,6 +271,9 @@ public class JFrameCadCliente extends javax.swing.JFrame {
 
             }
         }
+        
+        this.setVisible(false);
+        this.dispose();
         
     }//GEN-LAST:event_btnSalvarActionPerformed
 
@@ -310,10 +315,14 @@ public class JFrameCadCliente extends javax.swing.JFrame {
     {
         txtNome.setText(atual.getNome());
         txtTelefone.setText(atual.getTelefone());
-        txtEndereco.setText(atual.getEndereco());
+        String endereco[] = atual.getEndereco().split(";");
+        txtEndereco.setText(endereco[0]);
+        txtComplemento.setText(endereco[1]);
+        txtNumero.setText(endereco[2]);
         txtCep.setText(atual.getCep());
         txtBairro.setText(atual.getBairro());
         txtID.setText(Integer.toString(atual.getId()));
+        
     }
     
     
