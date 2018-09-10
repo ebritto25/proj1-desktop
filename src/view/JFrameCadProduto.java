@@ -15,6 +15,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import model.Produto;
 import model.TipoProduto;
+import utils.Mode;
 
 /**
  *
@@ -23,11 +24,41 @@ import model.TipoProduto;
 public class JFrameCadProduto extends javax.swing.JFrame {
 
     private Map<String,TipoProduto> lista_tipos;
+    private Produto atual;
+    private Mode mode;
+    
     /**
      * Creates new form JFrameCadProduto
      */
+    
+    
+    public JFrameCadProduto(Produto produto,Mode mode)
+    {
+        
+        lista_tipos = new HashMap<String,TipoProduto>();
+        
+        initComponents();
+        fillCombo();
+        
+        atual = produto;
+        this.mode = mode;
+        
+        txtID.setEnabled(false);
+        
+        
+        if(this.mode == Mode.DELETE)
+        {
+            this.btnSalvar.setText("Excluir");
+            disableFields();
+        }
+        fillFields();
+        
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    }
+    
     public JFrameCadProduto() {
         
+        mode = Mode.INSERT;
         lista_tipos = new HashMap<String,TipoProduto>();
         
         
@@ -40,6 +71,25 @@ public class JFrameCadProduto extends javax.swing.JFrame {
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
 
+    
+    private void disableFields()
+    {
+        txtDescricao.setEnabled(false);
+        txtPreco.setEnabled(false);
+        txtID.setEnabled(false);
+        jComboTipos.setEnabled(false);
+        this.btnLimpar.setEnabled(false);
+        this.btnNovoTipo.setEnabled(false);
+    }
+    
+    private void fillFields()
+    {
+        txtDescricao.setText(atual.getDescricao());
+        txtPreco.setText(Double.toString(atual.getPreco()));
+        txtID.setText(Integer.toString(atual.getId()));
+        jComboTipos.setSelectedItem(atual.getTipo().getDescricao());
+        
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -174,12 +224,29 @@ public class JFrameCadProduto extends javax.swing.JFrame {
             int id = 0;
             if( !list.isEmpty() )
                 id = list.get(list.size()-1).getId() + 1;
-                    
-            ProdutoDAO.insert(new Produto(id,txtDescricao.getText(),Double.parseDouble(txtPreco.getText()), lista_tipos.get(tipo)));
             
-            JOptionPane.showMessageDialog(this,"Produto Cadastrado com Sucesso!", "Cadastro de Produto", 1);
+            if( mode == Mode.INSERT )
+            {
+                ProdutoDAO.insert(new Produto(id,txtDescricao.getText(),Double.parseDouble(txtPreco.getText()), lista_tipos.get(tipo)));
 
+                JOptionPane.showMessageDialog(this,"Produto Cadastrado com Sucesso!", "Cadastro de Produto", 1);
+            }
+            else if( mode == Mode.EDIT )
+            {
+                ProdutoDAO.update(atual,new Produto(atual.getId(),txtDescricao.getText(),Double.parseDouble(txtPreco.getText()), lista_tipos.get(tipo)));
+
+                JOptionPane.showMessageDialog(this,"Produto atualizado com Sucesso!", "Edição de Produto", 1);
+            }
+            else
+            {
+                ProdutoDAO.delete(atual);
+                JOptionPane.showMessageDialog(this,"Produto excluido com Sucesso!", "Exclusão de Produto", 1);
+            }
         }
+        
+        this.setVisible(false);
+        this.dispose();
+                
     }//GEN-LAST:event_btnSalvarActionPerformed
 
     private void btnNovoTipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoTipoActionPerformed

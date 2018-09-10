@@ -60,10 +60,6 @@ public class JFrameCadPedido extends javax.swing.JFrame {
         
         initComponents();
 
-        txtID.setVisible(true);
-        txtID.setEnabled(false);
-        lbID.setVisible(true);
-        
         
         
         fillFields();
@@ -76,7 +72,14 @@ public class JFrameCadPedido extends javax.swing.JFrame {
     
     public JFrameCadPedido() {
         formaPgto = new HashMap<String,TipoPagamento>();
+        
+        itens = new ArrayList<Pair<Produto,Integer>>();
+
         initComponents();
+        
+        txtID.setVisible(false);
+        lbID.setVisible(false);
+        
         fillCombo();
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
@@ -92,8 +95,6 @@ public class JFrameCadPedido extends javax.swing.JFrame {
 
         lbID = new javax.swing.JLabel();
         txtID = new javax.swing.JTextField();
-        txtData = new javax.swing.JTextField();
-        lbData = new javax.swing.JLabel();
         lbCliente = new javax.swing.JLabel();
         txtCliente = new javax.swing.JTextField();
         btnBuscarCliente = new javax.swing.JButton();
@@ -102,8 +103,6 @@ public class JFrameCadPedido extends javax.swing.JFrame {
         txtProduto = new javax.swing.JTextField();
         btnBuscarProduto = new javax.swing.JButton();
         lbProdutos = new javax.swing.JLabel();
-        lbSubTotal = new javax.swing.JLabel();
-        txtSubTotal = new javax.swing.JTextField();
         lbDesconto = new javax.swing.JLabel();
         txtDesconto = new javax.swing.JTextField();
         lbTotal = new javax.swing.JLabel();
@@ -118,8 +117,6 @@ public class JFrameCadPedido extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         lbID.setText("ID:");
-
-        lbData.setText("Data:");
 
         lbCliente.setText("Cliente:");
 
@@ -142,8 +139,6 @@ public class JFrameCadPedido extends javax.swing.JFrame {
         });
 
         lbProdutos.setText("Produtos:");
-
-        lbSubTotal.setText("Sub-Total:");
 
         lbDesconto.setText("Desconto:");
 
@@ -177,9 +172,6 @@ public class JFrameCadPedido extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(lbSubTotal)
-                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
@@ -195,32 +187,25 @@ public class JFrameCadPedido extends javax.swing.JFrame {
                                         .addComponent(lbCliente)
                                         .addComponent(lbProdutos, javax.swing.GroupLayout.Alignment.TRAILING))
                                     .addComponent(lbID)
-                                    .addComponent(lbTotal))
+                                    .addComponent(lbTotal)
+                                    .addComponent(lbDesconto))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(txtProduto)
                                     .addComponent(txtCliente)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addComponent(txtSubTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(lbDesconto))
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addComponent(txtTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(jLabel8)))
+                                        .addComponent(txtDesconto, javax.swing.GroupLayout.DEFAULT_SIZE, 87, Short.MAX_VALUE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jLabel8)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(txtTroco)
-                                            .addComponent(txtDesconto)))
+                                        .addComponent(txtTroco, javax.swing.GroupLayout.DEFAULT_SIZE, 87, Short.MAX_VALUE)
+                                        .addGap(15, 15, 15))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(txtTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(110, 110, 110))
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(txtID, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(lbData)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(txtData, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(0, 32, Short.MAX_VALUE))
+                                        .addGap(0, 0, Short.MAX_VALUE))
                                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -237,9 +222,7 @@ public class JFrameCadPedido extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lbID)
-                    .addComponent(txtID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lbData)
-                    .addComponent(txtData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lbCliente)
@@ -259,16 +242,14 @@ public class JFrameCadPedido extends javax.swing.JFrame {
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(27, 27, 27)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lbSubTotal)
-                    .addComponent(txtSubTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lbDesconto)
-                    .addComponent(txtDesconto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lbTotal))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lbTotal)
-                    .addComponent(txtTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel8)
-                    .addComponent(txtTroco, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtTroco, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lbDesconto)
+                    .addComponent(txtDesconto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lbFormaPgto)
@@ -295,17 +276,13 @@ public class JFrameCadPedido extends javax.swing.JFrame {
             if( !list.isEmpty() )
                 id = list.get( list.size() - 1 ).getId();
             
-            SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
             Date data = new Date();        
             
-            try {
-                data = formato.parse(txtData.getText());
-            } catch (ParseException ex) {
-                Logger.getLogger(JFrameCadPedido.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            
+            Double subTotal = Double.parseDouble(txtTotal.getText()) - Double.parseDouble(txtDesconto.getText());
             
             Pedido p = new Pedido(id,data,cliente,Double.parseDouble(txtTotal.getText()),Double.parseDouble(txtDesconto.getText()),
-            formaPgto.get(jComboFormaPgto.getSelectedItem()),Double.parseDouble(txtTroco.getText()),Double.parseDouble(txtSubTotal.getText()));
+            formaPgto.get(jComboFormaPgto.getSelectedItem()),Double.parseDouble(txtTroco.getText()),subTotal);
             
             PedidoDAO.insert(p);
             
@@ -329,37 +306,48 @@ public class JFrameCadPedido extends javax.swing.JFrame {
         {
             ArrayList<Cliente> clientes = ClienteDAO.queryByNome(txtCliente.getText());
            
-            Map<Integer,Cliente> clis = new HashMap<Integer,Cliente>();
-            
-            String col[] =  {"ID","Nome","Endereço","Telefone"};
-            
-            DefaultTableModel tableModel = new DefaultTableModel(col,0);
-            
-            
-            jDialogTabela janela = new jDialogTabela(this,true,tableModel);
-            
-            
-            for(Cliente cliente : clientes )
+            if(!clientes.isEmpty())
             {
-                clis.put(cliente.getId(), cliente);
-                
-                Object[] data = {cliente.getId(),cliente.getNome(),
-                    cliente.getEndereco(),cliente.getTelefone()};
-                
-                
-                tableModel.addRow(data);
-            }
-            
-            
-            
-            int id = 0;
-   
-            id = janela.showWindow();
-            
-            cliente = clis.get(id);
+                Map<Integer,Cliente> clis = new HashMap<Integer,Cliente>();
 
-            txtCliente.setText(cliente.getNome());
-            
+                String col[] =  {"ID","Nome","Endereço","Telefone"};
+
+                DefaultTableModel tableModel = new DefaultTableModel(col,0);
+
+
+                jDialogTabela janela = new jDialogTabela(this,true,tableModel);
+
+
+                for(Cliente cliente : clientes )
+                {
+                    clis.put(cliente.getId(), cliente);
+
+                    Object[] data = {cliente.getId(),cliente.getNome(),
+                        cliente.getEndereco(),cliente.getTelefone()};
+
+
+                    tableModel.addRow(data);
+                }
+
+
+
+                int id = -1;
+
+                id = janela.showWindow();
+
+                if(id != -1)
+                {
+                    cliente = clis.get(id);
+
+                    txtCliente.setText(cliente.getNome());
+                }
+                else
+                    JOptionPane.showMessageDialog(rootPane,"Nenhum Cliente Selecionado!");
+
+            }
+            else
+                JOptionPane.showMessageDialog(rootPane, "Cliente Não encontrado!");
+
         }
     }//GEN-LAST:event_btnBuscarClienteActionPerformed
 
@@ -372,39 +360,55 @@ public class JFrameCadPedido extends javax.swing.JFrame {
         {
             ArrayList<Produto> list = ProdutoDAO.queryByDescricao(txtProduto.getText());
             
-            Map<Integer,Produto> produtos = new HashMap<Integer,Produto>();
             
-            String col[] =  {"ID","Descrição","Preço"};
-            
-            DefaultTableModel tableModel = new DefaultTableModel(col,0);
-            
-            jDialogTabela janela = new jDialogTabela(this,true,tableModel);
-            
-            for(Produto pro : list)
+            if(!list.isEmpty())
             {
-                produtos.put(pro.getId(), pro);
-                
-                Object[] data = {pro.getId(),pro.getDescricao(),pro.getPreco()};
-                
-                tableModel.addRow(data);
+                Map<Integer,Produto> produtos = new HashMap<Integer,Produto>();
+
+                String col[] =  {"ID","Descrição","Preço"};
+
+                DefaultTableModel tableModel = new DefaultTableModel(col,0);
+
+                jDialogTabela janela = new jDialogTabela(this,true,tableModel);
+
+                for(Produto pro : list)
+                {
+                    produtos.put(pro.getId(), pro);
+
+                    Object[] data = {pro.getId(),pro.getDescricao(),pro.getPreco()};
+
+                    tableModel.addRow(data);
+                }
+
+
+                int id = -1;
+                id = janela.showWindow();
+
+                if(id != -1)
+                {
+                    Produto pro = produtos.get(id);
+                    
+                    int qtd = 0;
+                    
+                    while(qtd == 0)
+                        qtd = Integer.parseInt(JOptionPane.showInputDialog("Informe a quantidade:"));
+
+                    itens.add(new Pair<Produto,Integer>(pro,qtd));
+
+
+                    DefaultTableModel dm = (DefaultTableModel) jTableProdutos.getModel();
+
+                    Object[] data = {pro.getDescricao(),qtd};
+
+                    dm.addRow(data);
+                }
+                else
+                    JOptionPane.showMessageDialog(rootPane,"Nenhum Produto Selecionado!");
+
             }
-            
-            
-            int id = 0;
-            id = janela.showWindow();
-            
-            Produto pro = produtos.get(id);
-            
-            int qtd = Integer.parseInt(JOptionPane.showInputDialog("Informe a quantidade:"));
-            
-            itens.add(new Pair<>(pro,qtd));
-            
-            
-            DefaultTableModel dm = (DefaultTableModel) jTableProdutos.getModel();
-           
-            Object[] data = {pro.getDescricao(),qtd};
-            
-            dm.addRow(data);
+            else
+                JOptionPane.showMessageDialog(rootPane, "Produto Não encontrado!");
+ 
             
             
         }
@@ -412,10 +416,8 @@ public class JFrameCadPedido extends javax.swing.JFrame {
 
     private boolean fieldsEmpty()
     {
-        if(txtCliente.getText().equals("") || txtData.getText().equals("") ||
-                txtDesconto.getText().equals("") || txtProduto.getText().equals("") ||
-                txtSubTotal.getText().equals("") || txtTotal.getText().equals("") ||
-                txtTroco.getText().equals("") || jTableProdutos.equals(null))
+        if(txtCliente.getText().equals("") || txtDesconto.getText().equals("") || txtProduto.getText().equals("") ||
+            txtTotal.getText().equals("") || txtTroco.getText().equals("") || jTableProdutos.equals(null))
             return true;
         else
             return false;
@@ -444,9 +446,7 @@ public class JFrameCadPedido extends javax.swing.JFrame {
     {
         txtID.setText(Integer.toString(atual.getId()));
         txtCliente.setText(atual.getIdCliente().getNome());
-        txtData.setText(atual.getDataPedido().toString());
         txtDesconto.setText(Double.toString(atual.getDesconto()));
-        txtSubTotal.setText(Double.toString(atual.getSubTotal()));
         txtTotal.setText(Double.toString(atual.getTotal()));
         txtTroco.setText(Double.toString(atual.getTroco()));
     }
@@ -455,9 +455,7 @@ public class JFrameCadPedido extends javax.swing.JFrame {
     {
         txtID.setEnabled(false);
         txtCliente.setEnabled(false);
-        txtData.setEnabled(false);
         txtDesconto.setEnabled(false);
-        txtSubTotal.setEnabled(false);
         txtTotal.setEnabled(false);
         txtTroco.setEnabled(false);
     }
@@ -505,20 +503,16 @@ public class JFrameCadPedido extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTableProdutos;
     private javax.swing.JLabel lbCliente;
-    private javax.swing.JLabel lbData;
     private javax.swing.JLabel lbDesconto;
     private javax.swing.JLabel lbFormaPgto;
     private javax.swing.JLabel lbID;
     private javax.swing.JLabel lbProduto;
     private javax.swing.JLabel lbProdutos;
-    private javax.swing.JLabel lbSubTotal;
     private javax.swing.JLabel lbTotal;
     private javax.swing.JTextField txtCliente;
-    private javax.swing.JTextField txtData;
     private javax.swing.JTextField txtDesconto;
     private javax.swing.JTextField txtID;
     private javax.swing.JTextField txtProduto;
-    private javax.swing.JTextField txtSubTotal;
     private javax.swing.JTextField txtTotal;
     private javax.swing.JTextField txtTroco;
     // End of variables declaration//GEN-END:variables

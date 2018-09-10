@@ -6,12 +6,14 @@
 package view;
 
 import controller.ClienteDAO;
+import controller.ProdutoDAO;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.Cliente;
+import model.Produto;
 import utils.Mode;
 
 /**
@@ -43,9 +45,10 @@ public class jFrameTelaPrincipal extends javax.swing.JFrame {
         menuDelCliente = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         menuCadPedido = new javax.swing.JMenuItem();
-        menuEditPedido = new javax.swing.JMenuItem();
-        menuDelPedido = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
+        menuCadPro = new javax.swing.JMenuItem();
+        menuEditPro = new javax.swing.JMenuItem();
+        menuDelPro = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(200, 200));
@@ -83,17 +86,41 @@ public class jFrameTelaPrincipal extends javax.swing.JFrame {
         jMenu2.setText("Pedidos");
 
         menuCadPedido.setText("Cadastro");
+        menuCadPedido.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuCadPedidoActionPerformed(evt);
+            }
+        });
         jMenu2.add(menuCadPedido);
-
-        menuEditPedido.setText("Editar");
-        jMenu2.add(menuEditPedido);
-
-        menuDelPedido.setText("Excluir");
-        jMenu2.add(menuDelPedido);
 
         jMenuBar1.add(jMenu2);
 
         jMenu3.setText("Produtos");
+
+        menuCadPro.setText("Cadastro ");
+        menuCadPro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuCadProActionPerformed(evt);
+            }
+        });
+        jMenu3.add(menuCadPro);
+
+        menuEditPro.setText("Editar");
+        menuEditPro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuEditProActionPerformed(evt);
+            }
+        });
+        jMenu3.add(menuEditPro);
+
+        menuDelPro.setText("Excluir");
+        menuDelPro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuDelProActionPerformed(evt);
+            }
+        });
+        jMenu3.add(menuDelPro);
+
         jMenuBar1.add(jMenu3);
 
         setJMenuBar(jMenuBar1);
@@ -204,6 +231,115 @@ public class jFrameTelaPrincipal extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(rootPane, "Cliente Não encontrado!");
     }//GEN-LAST:event_menuDelClienteActionPerformed
 
+    private void menuCadPedidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuCadPedidoActionPerformed
+       new JFrameCadPedido().setVisible(true);
+    }//GEN-LAST:event_menuCadPedidoActionPerformed
+
+    private void menuCadProActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuCadProActionPerformed
+        new JFrameCadProduto().setVisible(true);
+    }//GEN-LAST:event_menuCadProActionPerformed
+
+    private void menuEditProActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuEditProActionPerformed
+        String descricao = JOptionPane.showInputDialog("Informe a descrição do produto: ");
+        
+        
+        ArrayList<Produto> produtos = ProdutoDAO.queryByDescricao(descricao);
+
+        if(!produtos.isEmpty())
+        {
+            Map<Integer,Produto> pros = new HashMap<Integer,Produto>();
+
+            String col[] =  {"ID","Descrição","Preço","Tipo"};
+
+            DefaultTableModel tableModel = new DefaultTableModel(col,0);
+
+
+            jDialogTabela tabela = new jDialogTabela(this,true,tableModel);
+
+
+            for(Produto produto : produtos )
+            {
+                pros.put(produto.getId(), produto);
+
+                Object[] data = {produto.getId(),produto.getDescricao(),
+                                 produto.getPreco(), produto.getTipo().getDescricao()
+                };
+
+
+                tableModel.addRow(data);
+            }
+
+
+
+            int id = -1;
+
+            id = tabela.showWindow();
+
+            Produto pro = pros.get(id);
+
+            if(id != -1)
+            {
+                JFrameCadProduto janela = new JFrameCadProduto(pro,Mode.EDIT);
+                janela.setVisible(true);
+            }
+            else
+                JOptionPane.showMessageDialog(rootPane,"Nenhum produto Selecionado!");
+        }
+        else
+            JOptionPane.showMessageDialog(rootPane, "Produto Não encontrado!");
+        
+    }//GEN-LAST:event_menuEditProActionPerformed
+
+    private void menuDelProActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuDelProActionPerformed
+        String descricao = JOptionPane.showInputDialog("Informe a descrição do produto: ");
+        
+        
+        ArrayList<Produto> produtos = ProdutoDAO.queryByDescricao(descricao);
+
+        if(!produtos.isEmpty())
+        {
+            Map<Integer,Produto> pros = new HashMap<Integer,Produto>();
+
+            String col[] =  {"ID","Descrição","Preço","Tipo"};
+
+            DefaultTableModel tableModel = new DefaultTableModel(col,0);
+
+
+            jDialogTabela tabela = new jDialogTabela(this,true,tableModel);
+
+
+            for(Produto produto : produtos )
+            {
+                pros.put(produto.getId(), produto);
+
+                Object[] data = {produto.getId(),produto.getDescricao(),
+                                 produto.getPreco(), produto.getTipo().getDescricao()
+                };
+
+
+                tableModel.addRow(data);
+            }
+
+
+
+            int id = -1;
+
+            id = tabela.showWindow();
+
+            Produto pro = pros.get(id);
+
+            if(id != -1)
+            {
+                JFrameCadProduto janela = new JFrameCadProduto(pro,Mode.DELETE);
+                janela.setVisible(true);
+            }
+            else
+                JOptionPane.showMessageDialog(rootPane,"Nenhum produto Selecionado!");
+        }
+        else
+            JOptionPane.showMessageDialog(rootPane, "Produto Não encontrado!");
+    }//GEN-LAST:event_menuDelProActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -245,10 +381,11 @@ public class jFrameTelaPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem menuCadCliente;
     private javax.swing.JMenuItem menuCadPedido;
+    private javax.swing.JMenuItem menuCadPro;
     private javax.swing.JMenu menuCliente;
     private javax.swing.JMenuItem menuDelCliente;
-    private javax.swing.JMenuItem menuDelPedido;
+    private javax.swing.JMenuItem menuDelPro;
     private javax.swing.JMenuItem menuEditCliente;
-    private javax.swing.JMenuItem menuEditPedido;
+    private javax.swing.JMenuItem menuEditPro;
     // End of variables declaration//GEN-END:variables
 }
