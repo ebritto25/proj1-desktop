@@ -95,7 +95,7 @@ public class Database {
 		if(fileTipoProduto == null)
 		{
 			fileTipoProduto = checaFile("tipoProdutoDatabase.csv");
-			String iniciais = "1,Refrigerante\n2,Comida";
+			String iniciais = "1,Refrigerante\n2,Comida\n";
 			FileManager.writeFile(fileTipoProduto, iniciais,false);
 		}
 		
@@ -107,7 +107,7 @@ public class Database {
 		if(fileTipoPagamento == null)
 		{
 			fileTipoPagamento = checaFile("tipoPagamentoDatabase.csv");
-			String iniciais = "1,Cartão\n2,Dinheiro";
+			String iniciais = "1,Cartão\n2,Dinheiro\n";
 			FileManager.writeFile(fileTipoPagamento, iniciais,false);
 		}
 		
