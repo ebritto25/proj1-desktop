@@ -10,23 +10,14 @@ import controller.ItensPedidoDAO;
 import controller.PedidoDAO;
 import controller.ProdutoDAO;
 import controller.TipoPagamentoDAO;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.util.Pair;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.JPopupMenu;
-import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import model.Cliente;
 import model.ItensPedido;
@@ -51,6 +42,7 @@ public class JFrameCadPedido extends javax.swing.JFrame {
     
     private Pedido atual;
     private Mode mode;
+    private double total;
     
     public JFrameCadPedido(Pedido pedido, Mode _mode)
     {
@@ -60,7 +52,6 @@ public class JFrameCadPedido extends javax.swing.JFrame {
         
         initComponents();
 
-        
         
         fillFields();
         
@@ -77,8 +68,11 @@ public class JFrameCadPedido extends javax.swing.JFrame {
 
         initComponents();
         
+        total = 0;
+        
         txtID.setVisible(false);
         lbID.setVisible(false);
+        
         
         fillCombo();
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -106,13 +100,13 @@ public class JFrameCadPedido extends javax.swing.JFrame {
         lbDesconto = new javax.swing.JLabel();
         txtDesconto = new javax.swing.JTextField();
         lbTotal = new javax.swing.JLabel();
-        txtTotal = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
         txtTroco = new javax.swing.JTextField();
         jComboFormaPgto = new javax.swing.JComboBox<>();
         btnSalvar = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTableProdutos = new javax.swing.JTable();
+        txtTotal = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -165,6 +159,8 @@ public class JFrameCadPedido extends javax.swing.JFrame {
         ));
         jScrollPane2.setViewportView(jTableProdutos);
 
+        txtTotal.setText("0");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -200,13 +196,12 @@ public class JFrameCadPedido extends javax.swing.JFrame {
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(txtTroco, javax.swing.GroupLayout.DEFAULT_SIZE, 87, Short.MAX_VALUE)
                                         .addGap(15, 15, 15))
+                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addComponent(txtTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(110, 110, 110))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(txtID, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(0, 0, Short.MAX_VALUE))
-                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))))
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(txtID, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(txtTotal))
+                                        .addGap(0, 0, Short.MAX_VALUE)))))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btnBuscarCliente)
@@ -240,10 +235,10 @@ public class JFrameCadPedido extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(18, 18, 18)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(27, 27, 27)
+                .addGap(31, 31, 31)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lbTotal))
+                    .addComponent(lbTotal)
+                    .addComponent(txtTotal))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
@@ -254,7 +249,7 @@ public class JFrameCadPedido extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lbFormaPgto)
                     .addComponent(jComboFormaPgto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 87, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 91, Short.MAX_VALUE)
                 .addComponent(btnSalvar)
                 .addContainerGap())
         );
@@ -281,7 +276,7 @@ public class JFrameCadPedido extends javax.swing.JFrame {
             
             Double subTotal = Double.parseDouble(txtTotal.getText()) - Double.parseDouble(txtDesconto.getText());
             
-            Pedido p = new Pedido(id,data,cliente,Double.parseDouble(txtTotal.getText()),Double.parseDouble(txtDesconto.getText()),
+            Pedido p = new Pedido(id,data,cliente,total,Double.parseDouble(txtDesconto.getText()),
             formaPgto.get(jComboFormaPgto.getSelectedItem()),Double.parseDouble(txtTroco.getText()),subTotal);
             
             PedidoDAO.insert(p);
@@ -294,6 +289,8 @@ public class JFrameCadPedido extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this,"Pedido Registrado com Sucesso!", "Registro de Pedido", 1);
 
         }
+        this.setVisible(false);
+        this.dispose();
     }//GEN-LAST:event_btnSalvarActionPerformed
 
     private void btnBuscarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarClienteActionPerformed
@@ -395,6 +392,9 @@ public class JFrameCadPedido extends javax.swing.JFrame {
 
                     itens.add(new Pair<Produto,Integer>(pro,qtd));
 
+                    total += pro.getPreco() * qtd;
+                    
+                    txtTotal.setText(Double.toString(total));
 
                     DefaultTableModel dm = (DefaultTableModel) jTableProdutos.getModel();
 
@@ -404,6 +404,7 @@ public class JFrameCadPedido extends javax.swing.JFrame {
                 }
                 else
                     JOptionPane.showMessageDialog(rootPane,"Nenhum Produto Selecionado!");
+                
 
             }
             else
@@ -417,7 +418,7 @@ public class JFrameCadPedido extends javax.swing.JFrame {
     private boolean fieldsEmpty()
     {
         if(txtCliente.getText().equals("") || txtDesconto.getText().equals("") || txtProduto.getText().equals("") ||
-            txtTotal.getText().equals("") || txtTroco.getText().equals("") || jTableProdutos.equals(null))
+             txtTroco.getText().equals("") || jTableProdutos.equals(null))
             return true;
         else
             return false;
@@ -456,43 +457,9 @@ public class JFrameCadPedido extends javax.swing.JFrame {
         txtID.setEnabled(false);
         txtCliente.setEnabled(false);
         txtDesconto.setEnabled(false);
-        txtTotal.setEnabled(false);
         txtTroco.setEnabled(false);
     }
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(JFrameCadPedido.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(JFrameCadPedido.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(JFrameCadPedido.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(JFrameCadPedido.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new JFrameCadPedido().setVisible(true);
-            }
-        });
-    }
+   
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscarCliente;
@@ -513,7 +480,7 @@ public class JFrameCadPedido extends javax.swing.JFrame {
     private javax.swing.JTextField txtDesconto;
     private javax.swing.JTextField txtID;
     private javax.swing.JTextField txtProduto;
-    private javax.swing.JTextField txtTotal;
+    private javax.swing.JLabel txtTotal;
     private javax.swing.JTextField txtTroco;
     // End of variables declaration//GEN-END:variables
 }
