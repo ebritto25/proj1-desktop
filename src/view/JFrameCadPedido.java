@@ -275,9 +275,15 @@ public class JFrameCadPedido extends javax.swing.JFrame {
             
             
             Double subTotal = Double.parseDouble(txtTotal.getText()) - Double.parseDouble(txtDesconto.getText());
-            
+            Double troco;
+			
+			if(txtTroco.getText().equals(""))
+				troco = 0.0;
+			else
+				troco = Double.parseDouble(txtTroco.getText());
+			
             Pedido p = new Pedido(id,data,cliente,total,Double.parseDouble(txtDesconto.getText()),
-            formaPgto.get(jComboFormaPgto.getSelectedItem()),Double.parseDouble(txtTroco.getText()),subTotal);
+            formaPgto.get(jComboFormaPgto.getSelectedItem()),troco,subTotal);
             
             PedidoDAO.insert(p);
             
@@ -287,10 +293,11 @@ public class JFrameCadPedido extends javax.swing.JFrame {
             
             
             JOptionPane.showMessageDialog(this,"Pedido Registrado com Sucesso!", "Registro de Pedido", 1);
-
+			
+			this.setVisible(false);
+			this.dispose();
         }
-        this.setVisible(false);
-        this.dispose();
+        
     }//GEN-LAST:event_btnSalvarActionPerformed
 
     private void btnBuscarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarClienteActionPerformed
@@ -418,7 +425,7 @@ public class JFrameCadPedido extends javax.swing.JFrame {
     private boolean fieldsEmpty()
     {
         if(txtCliente.getText().equals("") || txtDesconto.getText().equals("") || txtProduto.getText().equals("") ||
-             txtTroco.getText().equals("") || jTableProdutos.equals(null))
+			jTableProdutos.equals(null))
             return true;
         else
             return false;
