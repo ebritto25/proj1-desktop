@@ -96,7 +96,7 @@ public class TipoPagamentoDAO {
 				String[] r_dados = registro.split(",");
 				String r_desc = r_dados[1];
 				
-				if(r_desc.contains(descricao))
+				if(r_desc.toUpperCase().contains(descricao.toUpperCase()))
 					encontrados.add(new TipoPagamento(registro));
 				
 			}

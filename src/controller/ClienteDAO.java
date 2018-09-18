@@ -102,7 +102,7 @@ public class ClienteDAO {
 				String[] r_dados = registro.split(",");
 				String r_nome = r_dados[1];
 				
-				if(r_nome.contains(nome))
+				if(r_nome.toUpperCase().contains(nome.toUpperCase()))
 					encontrados.add(new Cliente(registro));
 			}
 		}

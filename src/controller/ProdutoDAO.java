@@ -111,7 +111,7 @@ public class ProdutoDAO {
 				String[] r_dados = registro.split(",");
 				String r_desc = r_dados[1];
 				
-				if(r_desc.contains(descricao))
+				if(r_desc.toUpperCase().contains(descricao.toUpperCase()))
 				{
 					Produto prod = produtoBuilder(registro);
 					if(prod != null)
