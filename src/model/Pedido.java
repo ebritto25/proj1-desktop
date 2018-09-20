@@ -1,8 +1,12 @@
 package model;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Pedido {
+public class Pedido implements Serializable{
+    
+        private static final long serialVersionUID = 1335421L;
+
 	private int id;
 	private Date dataPedido;
 	private Cliente cliente;

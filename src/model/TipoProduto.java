@@ -1,6 +1,11 @@
 package model;
 
-public class TipoProduto {
+import java.io.Serializable;
+
+public class TipoProduto implements Serializable{
+        
+        private static final long serialVersionUID = 1335421L;
+    
 	private int id;
 	private String descricao;
 
