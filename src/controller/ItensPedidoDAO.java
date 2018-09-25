@@ -4,8 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import model.ItensPedido;
-import model.Pedido;
-import model.Produto;
 import utils.FileManager;
 
 public class ItensPedidoDAO {
@@ -30,7 +28,7 @@ public class ItensPedidoDAO {
 	{
 		if(connect())
 		{
-			return FileManager.writeFile(db,ip.toString(),true);
+			return FileManager.writeFile(db,ip,true);
 		}
 		return false;
 	}
@@ -40,28 +38,18 @@ public class ItensPedidoDAO {
 		ArrayList<ItensPedido> encontrados = new ArrayList<>();
 		if(connect())
 		{
-			String dados = FileManager.readFile(db);
-			String[] registros = dados.split("\n");
+			ArrayList registros = FileManager.readFile(db);
 			
-			if(registros[0].equals(""))
+			if(registros.isEmpty())
 				return encontrados;
 			
-			for(String registro : registros)
+			for(Object registro : registros)
 			{
-				String[] r_dados = registro.split(",");
-				int r_idPedido = Integer.parseInt(r_dados[1]);
-
-				if(r_idPedido == idPedido)
+				ItensPedido ip = (ItensPedido)registro;
+				if(ip.getPedido().getId() == idPedido)
 				{
-					Pedido pedido = PedidoDAO.queryByID(r_idPedido);
-					
-					int r_idProduto = Integer.parseInt(r_dados[0]);
-					Produto produto = ProdutoDAO.queryByID(r_idProduto);
-					
-					int quantidade = Integer.parseInt(r_dados[2]);
-					encontrados.add(new ItensPedido(produto,pedido,quantidade));
+					encontrados.add(ip);
 				}
-				
 			}
 		}
 		return encontrados;
@@ -73,27 +61,7 @@ public class ItensPedidoDAO {
 		
 		if(connect())
 		{
-			String dados = FileManager.readFile(db);
-			String[] registros = dados.split("\n");
-			
-			if(!registros[0].equals(""))
-				return encontrados;
-			
-			for(String registro : registros)
-			{
-				String[] r_dados = registro.split(",");
-				int r_idPedido = Integer.parseInt(r_dados[1]);
-
-				
-				Pedido pedido = PedidoDAO.queryByID(r_idPedido);
-
-				int r_idProduto = Integer.parseInt(r_dados[0]);
-				Produto produto = ProdutoDAO.queryByID(r_idProduto);
-
-				int quantidade = Integer.parseInt(r_dados[2]);
-				encontrados.add(new ItensPedido(produto,pedido,quantidade));
-				
-			}
+			encontrados = FileManager.readFile(db);		
 		}
 		
 		return encontrados;
@@ -103,11 +71,17 @@ public class ItensPedidoDAO {
 	{
 		if(connect())
 		{
-			String dados = FileManager.readFile(db);
-			return FileManager.writeFile(db, dados.replace(ip.toString(), novosDados.toString()), false);
+			ArrayList<ItensPedido> registros = FileManager.readFile(db);
+			registros.set(registros.indexOf(ip), novosDados);
+			
+			for(int i = 0;i < registros.size();i++)
+			{
+				FileManager.writeFile(db, registros.get(i), (i!=0));
+			}
+			
+			return true;
 		}
 	
-		
 		return false;
 	}
 	
@@ -115,8 +89,17 @@ public class ItensPedidoDAO {
 	{
 		if(connect())
 		{
-			String dados = FileManager.readFile(db);
-			return FileManager.writeFile(db, dados.replace(ip.toString(),""), false);
+			ArrayList<ItensPedido> registros = FileManager.readFile(db);
+			registros.remove(ip);
+			
+			if(registros.isEmpty())
+				return FileManager.deleteFile(db);
+			
+			for(int i = 0;i < registros.size();i++)
+			{
+				FileManager.writeFile(db, registros.get(i), (i!=0));
+			}
+			
 		}
 		return false;
 	}

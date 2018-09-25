@@ -5,7 +5,7 @@ import java.io.Serializable;
 
 public class Cliente implements Serializable{
     
-        private static final long serialVersionUID = 1335421L;
+    private static final long serialVersionUID = 1335421L;
         
 	private int id;
 	private String nome;

@@ -31,7 +31,7 @@ public class TipoProdutoDAO {
 	{
 		if(connect())
 		{
-			return FileManager.writeFile(db, tp.toString(),true);
+			return FileManager.writeFile(db, tp,true);
 		}
 		
 		return false;
@@ -42,22 +42,18 @@ public class TipoProdutoDAO {
 
 		if(connect())
 		{
-			String dados = FileManager.readFile(db);
-			String[] registros = dados.split("\n");
+			ArrayList<TipoProduto> registros = FileManager.readFile(db);
 			
-			if(registros[0].equals(""))
+			if(registros.isEmpty())
 				return null;
 			
-			for(String registro : registros)
+			for(Object registro : registros)
 			{
-				String[] dadosRegistro = registro.split(",");
-				int r_id = Integer.parseInt(dadosRegistro[0]);
-
-				if(r_id == id)
-					return new TipoProduto(registro);				
+				TipoProduto tp = (TipoProduto)registro;
+				if(tp.getId() == id)
+					return tp;				
 			}		
 		}
-		
 		return null;
 	}
 	
@@ -68,16 +64,7 @@ public class TipoProdutoDAO {
 		
 		if(connect())
 		{
-			String dados = FileManager.readFile(db);                  
-			String[] registros = dados.split("\n");
-                      
-			if(registros[0].equals(""))
-				return encontrados;
-			
-			for(String registro : registros)
-			{
-				encontrados.add(new TipoProduto(registro));
-			}
+			encontrados = FileManager.readFile(db);                  
 		}
 		
 		return encontrados;
@@ -89,19 +76,16 @@ public class TipoProdutoDAO {
 		
 		if(connect())
 		{
-			String dados = FileManager.readFile(db);
-			String[] registros = dados.split("\n");
+			ArrayList<TipoProduto> registros = FileManager.readFile(db);
 			
-			if(registros[0].equals(""))
+			if(registros.isEmpty())
 				return encontrados;
 			
-			for(String registro : registros)
+			for(Object registro : registros)
 			{
-				String[] r_dados = registro.split(",");
-				String r_desc = r_dados[1];
-				
-				if(r_desc.toUpperCase().contains(descricao.toUpperCase()))
-					encontrados.add(new TipoProduto(registro));
+				TipoProduto tp = (TipoProduto)registro;
+				if(tp.getDescricao().toUpperCase().contains(descricao.toUpperCase()))
+					encontrados.add(tp);
 			}
 		}
 		
@@ -113,10 +97,15 @@ public class TipoProdutoDAO {
 		
 		if(connect())
 		{
-			String dados = FileManager.readFile(db);
-			return FileManager.writeFile(db, dados.replace(tp.toString(), novosDados.toString()),false);
+			ArrayList<TipoProduto> registros = FileManager.readFile(db);
+			registros.set(registros.indexOf(tp), novosDados);
+			
+			for(int i = 0;i < registros.size();i++)
+			{
+				FileManager.writeFile(db, registros.get(i), (i!=0));
+			}
+			return true;
 		}
-		
 		return false;
 	}
 		
@@ -125,8 +114,18 @@ public class TipoProdutoDAO {
 		
 		if(connect())
 		{
-			String dados = FileManager.readFile(db);
-			return FileManager.writeFile(db, dados.replace(tp.toString(), ""),false);
+			ArrayList<TipoProduto> registros = FileManager.readFile(db);
+			registros.remove(tp);
+			
+			if(registros.isEmpty())
+				return FileManager.deleteFile(db);
+			
+			for(int i = 0;i < registros.size();i++)
+			{
+				FileManager.writeFile(db, registros.get(i), (i != 0));
+			}
+			
+			return true;
 		}
 		
 		return false;

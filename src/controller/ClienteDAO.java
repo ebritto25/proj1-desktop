@@ -35,7 +35,7 @@ public class ClienteDAO {
 	{
 		if(connect())
 		{
-			return FileManager.writeFile(db, cli.toString(),true);
+			return FileManager.writeFile(db, cli,true);
 		}
 		
 		return false;
@@ -46,17 +46,16 @@ public class ClienteDAO {
 		
 		if(connect())
 		{
-			String[] registros = FileManager.readFile(db).split("\n");
+			ArrayList registros = FileManager.readFile(db);
 			
-			if(registros[0].equals(""))
+			if(registros.isEmpty())
 				return null;
 			
-			for(String r : registros)
+			for(Object r : registros)
 			{
-				String[] dadosCliente = r.split(",");
-				int r_id = Integer.parseInt(dadosCliente[0]);
-				if(id == r_id)
-					return new Cliente(r);
+				Cliente c = (Cliente)r;
+				if(id == c.getId())
+					return c;
 			}
 			
 		}
@@ -70,16 +69,7 @@ public class ClienteDAO {
 		
 		if(connect())
 		{
-			String[] registros = FileManager.readFile(db).split("\n");
-                                              
-			if(registros[0].equals(""))
-				return clientes;
-
-			for(String r : registros)
-			{
-				clientes.add(new Cliente(r));
-			}
-                       
+			clientes = FileManager.readFile(db);                     
 		}
 				
 		return clientes;
@@ -91,19 +81,17 @@ public class ClienteDAO {
 		
 		if(connect())
 		{
-			String dados = FileManager.readFile(db);
-			String[] registros = dados.split("\n");
+			ArrayList registros = FileManager.readFile(db);
 			
-			if(registros[0].equals(""))
+			if(registros.isEmpty())
 				return encontrados;
 			
-			for(String registro : registros)
+			for(Object registro : registros)
 			{
-				String[] r_dados = registro.split(",");
-				String r_nome = r_dados[1];
+				Cliente c = (Cliente) registro;
 				
-				if(r_nome.toUpperCase().contains(nome.toUpperCase()))
-					encontrados.add(new Cliente(registro));
+				if(c.getNome().toUpperCase().contains(nome.toUpperCase()))
+					encontrados.add(c);
 			}
 		}
 		
@@ -114,10 +102,17 @@ public class ClienteDAO {
 	{
 		if(connect())
 		{
-			String dados = FileManager.readFile(db);
-			String novosRegistros = dados.replace(cli.toString(),"");
+			ArrayList registros = FileManager.readFile(db);
+			registros.remove(cli);
 			
-			return FileManager.writeFile(db, novosRegistros,false);
+			if(registros.isEmpty())
+				return FileManager.deleteFile(db);
+			
+			for(int i = 0;i < registros.size();i++)
+			{
+				FileManager.writeFile(db, registros.get(i),(i!=0));
+			}
+			return true;
 			
 		}
 		
@@ -128,10 +123,17 @@ public class ClienteDAO {
 	{
 		if(connect())
 		{
-			String dados = FileManager.readFile(db);
-			String novosRegistros = dados.replace(cli.toString(),novosDados.toString());
+			ArrayList registros = FileManager.readFile(db);
+			registros.set(registros.indexOf(cli), novosDados);
 			
-			return FileManager.writeFile(db, novosRegistros,false);
+			if(registros.isEmpty())
+				return FileManager.deleteFile(db);
+			
+			for(int i = 0;i < registros.size();i++)
+			{
+				FileManager.writeFile(db, registros.get(i),(i!=0));
+			}
+			return true;
 			
 		}
 		return false;

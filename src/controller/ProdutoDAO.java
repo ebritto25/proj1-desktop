@@ -25,7 +25,7 @@ public class ProdutoDAO {
 		
 		return true;
 	}
-	
+	/*
 	private static Produto produtoBuilder(String registro)
 	{
 		String [] r_dados = registro.split(",");
@@ -35,13 +35,13 @@ public class ProdutoDAO {
 			return new Produto(registro,tProduto);
 		else
 			return null;
-	}
+	}*/
 	
 	public static boolean insert(Produto p)
 	{
 		if(connect())
 		{
-			return FileManager.writeFile(db, p.toString(),true);
+			return FileManager.writeFile(db, p,true);
 		}
 		return false;
 	}
@@ -51,21 +51,15 @@ public class ProdutoDAO {
 		
 		if(connect())
 		{
-			String dados = FileManager.readFile(db);
-			String[] registros = dados.split("\n");
-			
-			if(registros[0].equals(""))
-				return null;
-			
-			for(String registro : registros)
+			ArrayList<Produto> registros = FileManager.readFile(db);
+
+			for(Object registro : registros)
 			{
-				String[] r_dados = registro.split(",");
-				int r_id = Integer.parseInt(r_dados[0]);
-				if(r_id == id)
+				Produto p = (Produto)registro;
+				if(p.getId() == id)
 				{
-					return produtoBuilder(registro);
+					return p;
 				}
-					
 			}
 		}
 		return null;
@@ -73,25 +67,14 @@ public class ProdutoDAO {
 	
 	public static ArrayList<Produto> queryAll()
 	{
-		ArrayList<Produto> produtos = new ArrayList<>();
+		ArrayList<Produto> encontrados = new ArrayList<>();
 		
 		if(connect())
 		{
-			String dados = FileManager.readFile(db);
-			String[] registros = dados.split("\n");
-			
-			if(registros[0].equals(""))
-				return produtos;
-			
-			for(String registro : registros)
-			{
-				Produto prod = produtoBuilder(registro);
-				if(prod != null)
-					produtos.add(prod);
-			}
+			encontrados = FileManager.readFile(db);
 		}
 		
-		return produtos;
+		return encontrados;
 	}
 	
 	public static ArrayList<Produto> queryByDescricao(String descricao)
@@ -100,22 +83,17 @@ public class ProdutoDAO {
 		
 		if(connect())
 		{
-			String dados = FileManager.readFile(db);
-			String[] registros = dados.split("\n");
+			ArrayList<Produto> registros = FileManager.readFile(db);
 			
-			if(registros[0].equals(""))
+			if(registros.isEmpty())
 				return encontrados;
 			
-			for(String registro : registros)
+			for(Object registro : registros)
 			{
-				String[] r_dados = registro.split(",");
-				String r_desc = r_dados[1];
-				
-				if(r_desc.toUpperCase().contains(descricao.toUpperCase()))
+				Produto p = (Produto)registro;
+				if(p.getDescricao().toUpperCase().contains(descricao.toUpperCase()))
 				{
-					Produto prod = produtoBuilder(registro);
-					if(prod != null)
-						encontrados.add(prod);
+					encontrados.add(p);
 				}
 			}
 		}
@@ -127,10 +105,18 @@ public class ProdutoDAO {
 	{
 		if(connect())
 		{
-			String dados = FileManager.readFile(db);	
-			return FileManager.writeFile(db, dados.replace(prod.toString(), ""),false);
+			ArrayList<Produto> registros = FileManager.readFile(db);	
+			registros.remove(prod);
+			
+			if(registros.isEmpty())
+				return FileManager.deleteFile(db);
+			
+			for(int i = 0;i < registros.size();i++)
+			{
+				FileManager.writeFile(db, registros.get(i), (i!=0));
+			}
+			return true;
 		}
-		
 		return false; 
 	}
 	
@@ -138,8 +124,14 @@ public class ProdutoDAO {
 	{
 		if(connect())
 		{
-			String dados = FileManager.readFile(db);
-			return FileManager.writeFile(db, dados.replace(prod.toString(), novoProduto.toString()),false);
+			ArrayList<Produto> registros = FileManager.readFile(db);
+			registros.set(registros.indexOf(prod), novoProduto);
+			
+			for(int i = 0;i < registros.size();i++)
+			{
+				FileManager.writeFile(db, registros.get(i), (i!=0));
+			}
+			return true;
 		}
 		return false;
 	}

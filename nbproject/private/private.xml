@@ -5,6 +5,7 @@
         <group>
             <file>file:/home/eduardo/ProjQt/proj1-desktop/src/controller/Database.java</file>
             <file>file:/home/eduardo/ProjQt/proj1-desktop/src/controller/TipoProdutoDAO.java</file>
+            <file>file:/home/eduardo/ProjQt/proj1-desktop/src/model/Pedido.java</file>
             <file>file:/home/eduardo/ProjQt/proj1-desktop/src/view/JFrameCadCliente.java</file>
             <file>file:/home/eduardo/ProjQt/proj1-desktop/src/model/Cliente.java</file>
             <file>file:/home/eduardo/ProjQt/proj1-desktop/src/model/TipoProduto.java</file>
@@ -17,6 +18,7 @@
             <file>file:/home/eduardo/ProjQt/proj1-desktop/src/controller/ProdutoDAO.java</file>
             <file>file:/home/eduardo/ProjQt/proj1-desktop/src/model/Produto.java</file>
             <file>file:/home/eduardo/ProjQt/proj1-desktop/src/view/JFrameCadPedido.java</file>
+            <file>file:/home/eduardo/ProjQt/proj1-desktop/src/model/TipoPagamento.java</file>
             <file>file:/home/eduardo/ProjQt/proj1-desktop/src/controller/ClienteDAO.java</file>
         </group>
     </open-files>

@@ -5,7 +5,7 @@ import java.util.Date;
 
 public class Pedido implements Serializable{
     
-        private static final long serialVersionUID = 1335421L;
+	private static final long serialVersionUID = 1335421L;
 
 	private int id;
 	private Date dataPedido;

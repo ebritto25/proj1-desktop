@@ -3,9 +3,7 @@ package controller;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import model.Cliente;
 import model.Pedido;
-import model.TipoPagamento;
 import utils.FileManager;
 
 public class PedidoDAO {
@@ -28,7 +26,7 @@ public class PedidoDAO {
 	{
 		if(connect())
 		{
-			return FileManager.writeFile(db, ped.toString(),true);
+			return FileManager.writeFile(db, ped,true);
 		}
 		return false;
 	}
@@ -37,26 +35,18 @@ public class PedidoDAO {
 	{
 		if(connect())
 		{
-			String dados = FileManager.readFile(db);
-			String[] registros = dados.split("\n");
+			ArrayList<Pedido> registros = FileManager.readFile(db);
 			
-			if(registros[0].equals(""))
+			if(registros.isEmpty())
 				return null;
 			
-			for(String registro : registros)
+			for(Object registro : registros)
 			{
-				String[] r_dados = registro.split(",");
-				int r_id = Integer.parseInt(r_dados[0]);
-				if(r_id == id)
+				Pedido p = (Pedido)registro;
+				if(p.getId() == id)
 				{
-					int cliente_id = Integer.parseInt(r_dados[2]);
-					Cliente cliente = ClienteDAO.queryByID(cliente_id);
-					int pagamento_id = Integer.parseInt(r_dados[5]);
-					TipoPagamento pagamento = TipoPagamentoDAO.queryByID(pagamento_id);
-					
-					return new Pedido(registro,cliente,pagamento);
+					return p;
 				}
-				
 			}
 		}
 		
@@ -69,23 +59,7 @@ public class PedidoDAO {
 	
 		if(connect())
 		{
-			String dados = FileManager.readFile(db);
-			String[] registros = dados.split("\n");
-			
-			if(registros[0].equals(""))
-				return encontrados;
-			
-			for(String registro : registros)
-			{
-				String[] r_dados = registro.split(",");
-				
-				int cliente_id = Integer.parseInt(r_dados[2]);
-				Cliente cliente = ClienteDAO.queryByID(cliente_id);
-				int pagamento_id = Integer.parseInt(r_dados[5]);
-				TipoPagamento pagamento = TipoPagamentoDAO.queryByID(pagamento_id);
-				
-				encontrados.add(new Pedido(registro,cliente,pagamento));
-			}
+			encontrados = FileManager.readFile(db);
 		}
 		
 		return encontrados;
@@ -95,8 +69,17 @@ public class PedidoDAO {
 	{
 		if(connect())
 		{
-			String dados = FileManager.readFile(db);
-			return FileManager.writeFile(db, dados.replace(p.toString(), ""), false);
+			ArrayList registros = FileManager.readFile(db);
+			registros.remove(p);
+			
+			if(registros.isEmpty())
+				return FileManager.deleteFile(db);
+			
+			for(int i = 0;i < registros.size();i++)
+			{
+				FileManager.writeFile(db, registros.get(i), (i!=0));
+			}
+			return true;
 		}
 		return false;
 	}
@@ -105,8 +88,14 @@ public class PedidoDAO {
 	{
 		if(connect())
 		{
-			String dados = FileManager.readFile(db);
-			return FileManager.writeFile(db, dados.replace(p.toString(), novosDados.toString()), false);
+			ArrayList registros = FileManager.readFile(db);
+			registros.set(registros.indexOf(p),novosDados);
+		
+			for(int i = 0;i < registros.size();i++)
+			{
+				FileManager.writeFile(db, registros.get(i), (i!=0));
+			}
+			return true;
 		}
 		
 		return false;
