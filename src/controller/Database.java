@@ -2,6 +2,9 @@ package controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import model.TipoPagamento;
+import model.TipoProduto;
 import utils.FileManager;
 
 public class Database {
@@ -74,7 +77,7 @@ public class Database {
 	{
 		if(fileClientes == null)
 		{
-			fileClientes = checaFile("clientesDatabase.csv");
+			fileClientes = checaFile("clientesDatabase.dat");
 		}
 
 		return fileClientes;
@@ -84,7 +87,7 @@ public class Database {
 	{
 		if(fileProdutos == null)
 		{
-			fileProdutos = checaFile("produtosDatabase.csv");
+			fileProdutos = checaFile("produtosDatabase.dat");
 		}
 		
 		return fileProdutos;
@@ -94,9 +97,16 @@ public class Database {
 	{
 		if(fileTipoProduto == null)
 		{
-			fileTipoProduto = checaFile("tipoProdutoDatabase.csv");
-			String iniciais = "1,Refrigerante\n2,Comida\n";
-			FileManager.writeFile(fileTipoProduto, iniciais,false);
+			fileTipoProduto = checaFile("tipoProdutoDatabase.dat");
+			
+			ArrayList<TipoProduto> p = new ArrayList();
+			
+			p.add(new TipoProduto(1,"Refrigerante"));
+			p.add(new TipoProduto(2,"Comida"));
+			
+			for(int i = 0;i < p.size();i++)	
+				FileManager.writeFile(fileTipoProduto, p.get(i),(i!=0));
+			
 		}
 		
 		return fileTipoProduto;
@@ -106,9 +116,16 @@ public class Database {
 	{
 		if(fileTipoPagamento == null)
 		{
-			fileTipoPagamento = checaFile("tipoPagamentoDatabase.csv");
-			String iniciais = "1,Cartão\n2,Dinheiro\n";
-			FileManager.writeFile(fileTipoPagamento, iniciais,false);
+			fileTipoPagamento = checaFile("tipoPagamentoDatabase.dat");
+			
+			ArrayList<TipoPagamento> p = new ArrayList();
+			
+			p.add(new TipoPagamento(1,"Cartão"));
+			p.add(new TipoPagamento(2,"Dinheiro"));
+			
+			for(int i = 0;i < p.size();i++)	
+				FileManager.writeFile(fileTipoPagamento, p.get(i),(i!=0));
+			
 		}
 		
 		return fileTipoPagamento;
@@ -118,7 +135,7 @@ public class Database {
 	{
 		if(filePedido == null)
 		{
-			filePedido = checaFile("pedidoDatabase.csv");
+			filePedido = checaFile("pedidoDatabase.dat");
 		}
 		
 		return filePedido;
@@ -128,12 +145,9 @@ public class Database {
 	{
 		if(fileItensPedido == null)
 		{
-			fileItensPedido = checaFile("itensPedidoDatabase.csv");
+			fileItensPedido = checaFile("itensPedidoDatabase.dat");
 		}
 		
 		return fileItensPedido;
 	}
-	
-	
-	
 }

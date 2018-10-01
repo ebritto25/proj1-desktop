@@ -45,6 +45,15 @@ public class TipoProduto implements Serializable{
 	public String toString() {
 		return id + "," + descricao+"\n";
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if(obj == null || getClass() != obj.getClass())
+			return false;
+		
+		TipoProduto t = (TipoProduto)obj;
+		return this.id == t.getId();
+	}
 	
 	
 }

@@ -2,24 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/home/eduardo/ProjQt/proj1-desktop/src/controller/Database.java</file>
-            <file>file:/home/eduardo/ProjQt/proj1-desktop/src/controller/TipoProdutoDAO.java</file>
-            <file>file:/home/eduardo/ProjQt/proj1-desktop/src/model/Pedido.java</file>
-            <file>file:/home/eduardo/ProjQt/proj1-desktop/src/view/JFrameCadCliente.java</file>
-            <file>file:/home/eduardo/ProjQt/proj1-desktop/src/model/Cliente.java</file>
-            <file>file:/home/eduardo/ProjQt/proj1-desktop/src/model/TipoProduto.java</file>
-            <file>file:/home/eduardo/ProjQt/proj1-desktop/src/controller/PedidoDAO.java</file>
-            <file>file:/home/eduardo/ProjQt/proj1-desktop/src/model/ItensPedido.java</file>
-            <file>file:/home/eduardo/ProjQt/proj1-desktop/src/controller/ItensPedidoDAO.java</file>
-            <file>file:/home/eduardo/ProjQt/proj1-desktop/src/view/JFrameCadProduto.java</file>
-            <file>file:/home/eduardo/ProjQt/proj1-desktop/src/utils/FileManager.java</file>
-            <file>file:/home/eduardo/ProjQt/proj1-desktop/src/controller/TipoPagamentoDAO.java</file>
-            <file>file:/home/eduardo/ProjQt/proj1-desktop/src/controller/ProdutoDAO.java</file>
-            <file>file:/home/eduardo/ProjQt/proj1-desktop/src/model/Produto.java</file>
-            <file>file:/home/eduardo/ProjQt/proj1-desktop/src/view/JFrameCadPedido.java</file>
-            <file>file:/home/eduardo/ProjQt/proj1-desktop/src/model/TipoPagamento.java</file>
-            <file>file:/home/eduardo/ProjQt/proj1-desktop/src/controller/ClienteDAO.java</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>

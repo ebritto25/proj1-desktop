@@ -257,7 +257,7 @@ public class JFrameCadCliente extends javax.swing.JFrame {
             if( mode == Mode.INSERT )
             {
                 ClienteDAO.insert(new Cliente(id,txtNome.getText(),txtTelefone.getText(),end,txtBairro.getText(),txtCep.getText()));
-                JOptionPane.showMessageDialog(this,"Cliente Cadastrado com Sucesso!", "Cadastrdo de Cliente", 1);
+                JOptionPane.showMessageDialog(this,"Cliente Cadastrado com Sucesso!", "Cadastro de Cliente", 1);
             }
             else if( mode == Mode.EDIT )
             {

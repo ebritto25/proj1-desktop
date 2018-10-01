@@ -69,6 +69,15 @@ public class Produto implements Serializable{
 	public String toString() {
 		return id + "," + descricao + "," + preco + "," + tipo.getId()+"\n";
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if(obj == null || getClass() != obj.getClass())
+			return false;
+		
+		Produto p = (Produto)obj;
+		return this.id == p.getId();
+	}
 	
 	
 	

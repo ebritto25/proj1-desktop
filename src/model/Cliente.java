@@ -90,6 +90,16 @@ public class Cliente implements Serializable{
 	public String toString() {
 		return id + "," + nome + "," + telefone + "," + endereco + "," + bairro + "," + cep + "\n";
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if(obj == null || getClass() != obj.getClass())
+			return false;
+		
+		Cliente c = (Cliente) obj;
+		
+		return this.id == c.getId();
+	}
 	
 	
 	

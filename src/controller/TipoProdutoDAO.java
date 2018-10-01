@@ -100,6 +100,8 @@ public class TipoProdutoDAO {
 			ArrayList<TipoProduto> registros = FileManager.readFile(db);
 			registros.set(registros.indexOf(tp), novosDados);
 			
+			FileManager.deleteFile(db);
+			
 			for(int i = 0;i < registros.size();i++)
 			{
 				FileManager.writeFile(db, registros.get(i), (i!=0));
@@ -117,8 +119,7 @@ public class TipoProdutoDAO {
 			ArrayList<TipoProduto> registros = FileManager.readFile(db);
 			registros.remove(tp);
 			
-			if(registros.isEmpty())
-				return FileManager.deleteFile(db);
+			FileManager.deleteFile(db);
 			
 			for(int i = 0;i < registros.size();i++)
 			{

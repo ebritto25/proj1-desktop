@@ -40,7 +40,7 @@ public class FileManager {
 		{
 			FileOutputStream fos = null;
 
-			if(file.exists())
+			if(file.length() > 0)
 			{
 				fos = new FileOutputStream(file,append);
 				outputStream = new ObjectOutputStream(fos)
@@ -82,6 +82,7 @@ public class FileManager {
 			}
 			catch(java.io.EOFException ex)
 			{
+				System.out.println("ok");
 				System.err.println("Fim do arquivo " + ex);
 			}
 		}

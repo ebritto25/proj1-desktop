@@ -47,5 +47,15 @@ public class ItensPedido implements Serializable{
 	public String toString() {
 		return produto.getId() + "," + pedido.getId() + "," + quantidade+"\n";
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if(obj == null || getClass() != obj.getClass())
+			return false;
+		
+		ItensPedido p = (ItensPedido)obj;
+		return this.pedido.getId() == p.getPedido().getId() && 
+				this.produto.getId() == p.getProduto().getId();
+	}
 	
 }

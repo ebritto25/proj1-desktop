@@ -128,6 +128,15 @@ public class Pedido implements Serializable{
 		return id + "," + dataPedido.getTime() + "," + cliente.getId() + "," + total + "," + desconto + "," 
 																+ pagamento.getId() + "," + troco + "," + subTotal + "\n";
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if(obj == null || getClass() != obj.getClass())
+			return false;
+		
+		Pedido p = (Pedido)obj;
+		return this.id == p.getId();
+	}
 	
 	
 	

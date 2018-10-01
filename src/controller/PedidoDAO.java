@@ -72,8 +72,7 @@ public class PedidoDAO {
 			ArrayList registros = FileManager.readFile(db);
 			registros.remove(p);
 			
-			if(registros.isEmpty())
-				return FileManager.deleteFile(db);
+			FileManager.deleteFile(db);
 			
 			for(int i = 0;i < registros.size();i++)
 			{
@@ -91,6 +90,8 @@ public class PedidoDAO {
 			ArrayList registros = FileManager.readFile(db);
 			registros.set(registros.indexOf(p),novosDados);
 		
+			FileManager.deleteFile(db);
+			
 			for(int i = 0;i < registros.size();i++)
 			{
 				FileManager.writeFile(db, registros.get(i), (i!=0));

@@ -18,6 +18,12 @@ public class TipoPagamento implements Serializable{
 		this.id = Integer.parseInt(dados[0]);
 		this.descricao = dados[1];
 	}
+	
+	public TipoPagamento(int id,String descricao)
+	{
+		this.id = id;
+		this.descricao = descricao;
+	}
 
 	public int getId() {
 		return id;
@@ -39,6 +45,14 @@ public class TipoPagamento implements Serializable{
 	public String toString() {
 		return id + "," + descricao + "\n";
 	}
-			
+
+	@Override
+	public boolean equals(Object obj) {
+		if(obj == null || getClass() != obj.getClass())
+			return false;
+		
+		TipoPagamento t = (TipoPagamento)obj;
+		return this.id == t.getId();
+	}
 }
 
