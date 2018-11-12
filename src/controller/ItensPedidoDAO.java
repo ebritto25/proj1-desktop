@@ -94,10 +94,10 @@ public class ItensPedidoDAO {
 			statement = configureStatement(query);
 			results = statement.executeQuery();
 			
-			do
+			while(results.next())
 			{
 				encontrados.add(itensPedidoBuilder());
-			}while(results.next());
+			}
 		}
 		catch(SQLException ex)
 		{

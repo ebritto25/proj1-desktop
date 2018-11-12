@@ -112,10 +112,10 @@ public class ClienteDAO {
 			statement = configureStatement(query);
 			results = statement.executeQuery();
 			
-			do
+			while(results.next())
 			{	
 				clientes.add(clienteBuilder());
-			}while(results.next());
+			}
 		}
 		catch(SQLException ex)
 		{
@@ -138,10 +138,10 @@ public class ClienteDAO {
 			statement.setString(1, "%"+nome+"%");
 			results = statement.executeQuery();
 			
-			do
+			while(results.next())
 			{
 				encontrados.add(clienteBuilder());
-			}while(results.next());
+			}
 		}
 		catch(SQLException ex)
 		{

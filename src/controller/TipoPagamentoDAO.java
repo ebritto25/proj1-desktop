@@ -82,7 +82,7 @@ public class TipoPagamentoDAO {
                         results = statement.executeQuery();
                         
                         
-                        do
+                        while(results.next())
                         {
                             TipoPagamento tp = new TipoPagamento();
                             
@@ -91,7 +91,7 @@ public class TipoPagamentoDAO {
                             
                             encontrados.add(tp);
                             
-                        }while(results.next());
+                        }
                 }
                 catch(SQLException ex)
                 {
@@ -115,7 +115,7 @@ public class TipoPagamentoDAO {
                         results = statement.executeQuery();
                         
                         
-                        do
+                        while(results.next())
                         {
                             TipoPagamento tp = new TipoPagamento();
                             
@@ -124,7 +124,7 @@ public class TipoPagamentoDAO {
                             
                             encontrados.add(tp);
                             
-                        }while(results.next());
+                        }
                 }
                 catch(SQLException ex)
                 {

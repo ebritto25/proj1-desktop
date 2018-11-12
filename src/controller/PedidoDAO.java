@@ -115,10 +115,10 @@ public class PedidoDAO {
 			statement = configureStatement(query);
 			results = statement.executeQuery();
 			
-			do
+			while(results.next())
 			{	
 				encontrados.add(pedidoBuilder());
-			}while(results.next());
+			}
 		}
 		catch(SQLException ex)
 		{

@@ -101,10 +101,10 @@ public class ProdutoDAO {
 			statement = configureStatement(query);
 			results = statement.executeQuery();
 			
-			do
+			while(results.next())
 			{	
 				encontrados.add(produtoBuilder());
-			}while(results.next());
+			}
 		}
 		catch(SQLException ex)
 		{
@@ -127,10 +127,10 @@ public class ProdutoDAO {
 			statement.setString(1, "%"+descricao+"%");
 			results = statement.executeQuery();
 			
-			do
+			while(results.next())
 			{
 				encontrados.add(produtoBuilder());
-			}while(results.next());
+			}
 		}
 		catch(SQLException ex)
 		{
