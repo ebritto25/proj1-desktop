@@ -2,24 +2,26 @@ package controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import model.Pedido;
 import utils.FileManager;
 
 public class PedidoDAO {
-	private static File db;
+	private static Database db;
+        private static PreparedStatement statement;
+	private static ResultSet results = null;
 	
-	private static boolean connect()
+	private static void connect()
+	{ 
+            db = Database.getInstance();
+	}
+        
+        private static PreparedStatement configureStatement(String sql) throws SQLException
 	{
-		try
-		{
-			db = Database.getInstance().getDatabasePedido();
-		}
-		catch(IOException ex)
-		{
-			System.err.println(ex.getMessage());
-		}
-		return true;
+		return db.getConnection().prepareStatement(sql,ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
 	}
 	
 	public static boolean insert(Pedido ped)

@@ -11,7 +11,7 @@ import utils.FileManager;
 
 public class TipoPagamentoDAO {
 	private static Database db;
-        	private static PreparedStatement statement;
+        private static PreparedStatement statement;
 	private static ResultSet results = null;
 	
 	
@@ -54,6 +54,7 @@ public class TipoPagamentoDAO {
             {
                     String query = "select * from tipo_pagamento where id_tpagamento = ?";
                     statement = configureStatement(query);
+                    statement.setInt(1, id);
                     results = statement.executeQuery();
                     if(!results.isFirst())
                     {
@@ -110,6 +111,7 @@ public class TipoPagamentoDAO {
                 {
                         String query = "select * from tipo_pagamento where descricao_tpagamento like ?";
                         statement = configureStatement(query);
+			statement.setString(1, "%"+descricao+"%");
                         results = statement.executeQuery();
                         
                         
@@ -135,39 +137,42 @@ public class TipoPagamentoDAO {
 	
 	public static boolean delete(TipoPagamento tp)
 	{
-		if(connect())
+		connect();
+		try
 		{
-			ArrayList<TipoPagamento> registros = FileManager.readFile(db);
-			registros.remove(tp);
-			
-			FileManager.deleteFile(db);
-			
-			for(int i = 0;i < registros.size();i++)
-			{
-				FileManager.writeFile(db, registros.get(i), (i!=0));
-			}
-			
+			String query = "delete from tipo_produto where id_tpagamento = ?";
+			statement = configureStatement(query);
+			statement.setInt(1, tp.getId());
+			statement.executeUpdate();
+			db.getConnection().commit();
 			return true;
-			
 		}
+		catch(SQLException ex)
+		{
+			System.err.println("Erro no delete do TipoProduto: " + ex.getMessage());
+		}
+		
 		return false;
 	}
 	
 	public static boolean update(TipoPagamento tp, TipoPagamento novosDados)
 	{
-		if(connect())
+		connect();
+		try
 		{
-			ArrayList<TipoPagamento> registros = FileManager.readFile(db);
-			registros.set(registros.indexOf(tp), novosDados);
-			
-			FileManager.deleteFile(db);
-			
-			for(int i = 0;i < registros.size();i++)
-			{
-				FileManager.writeFile(db, registros.get(i), (i!=0));
-			}
+			String query = "update tipo_pagamento set descricao_tpagamento = ? where id_tpagamento = ?";
+			statement = configureStatement(query);
+			statement.setString(1, novosDados.getDescricao());
+			statement.setInt(2, tp.getId());
+			statement.executeUpdate();
+			db.getConnection().commit();
 			return true;
 		}
+		catch(SQLException ex)
+		{
+			System.err.println("Erro no update do TipoProduto: " + ex.getMessage());
+		}
+		
 		return false;
 	}
 }
