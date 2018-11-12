@@ -2,59 +2,72 @@ package controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import model.TipoProduto;
 import utils.FileManager;
 
 public class TipoProdutoDAO {
-	private static File db;
+	private static Database db;
+	private static PreparedStatement statement;
+	private static ResultSet results = null;
 	
 	public TipoProdutoDAO(){}
 	
-	private static boolean connect()
+	private static void connect()
 	{
-		try
-		{
-			db = Database.getInstance().getDatabaseTipoProduto();
-			
+
+		db = Database.getInstance();
+
+	}
+	
+	private static PreparedStatement configureStatement(String sql) throws SQLException
+	{
+		return db.getConnection().prepareStatement(sql,ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
+	}
+	
+	public static boolean insert(TipoProduto tp)
+	{
+		connect();
+		try{
+			String query = "insert into tipo_produto (descricao_tProduto) values (?)";
+			statement = configureStatement(query);
+			statement.setString(1, tp.getDescricao());
+			statement.executeUpdate();
+			db.getConnection().commit();
 		}
-		catch(IOException ex)
-		{
-			System.err.println(ex.getMessage());
+		catch(SQLException ex){
+			System.err.println("Erro na inserção: " + ex.getMessage());
 			return false;
 		}
 		
 		return true;
 	}
 	
-	public static boolean insert(TipoProduto tp)
-	{
-		if(connect())
-		{
-			return FileManager.writeFile(db, tp,true);
-		}
-		
-		return false;
-	}
-	
 	public static TipoProduto queryByID(int id)
 	{
+		TipoProduto tp = null;
 
-		if(connect())
+		connect();
+		try
 		{
-			ArrayList<TipoProduto> registros = FileManager.readFile(db);
-			
-			if(registros.isEmpty())
-				return null;
-			
-			for(Object registro : registros)
+			String query = "select * from tipo_produto where id_tProduto = ?";
+			statement = configureStatement(query);
+			results = statement.executeQuery();
+			if(!results.isFirst())
 			{
-				TipoProduto tp = (TipoProduto)registro;
-				if(tp.getId() == id)
-					return tp;				
-			}		
+				tp.setId(results.getInt(1));
+				tp.setDescricao(results.getString(2));
+			}
 		}
-		return null;
+		catch(SQLException ex)
+		{
+			System.err.println("Erro ao buscar por ID: " + ex);
+		}
+		
+		return tp;
 	}
 	
 	public static ArrayList<TipoProduto> queryAll()
@@ -62,9 +75,23 @@ public class TipoProdutoDAO {
 		
         ArrayList<TipoProduto> encontrados = new ArrayList<>();
 		
-		if(connect())
+		connect();
+		
+		try
 		{
-			encontrados = FileManager.readFile(db);                  
+			String query = "select * from tipo_produto";
+			statement = configureStatement(query);
+			results = statement.executeQuery();
+			TipoProduto tp = new TipoProduto();
+			do
+			{
+				tp.setId(results.getInt(1));
+				tp.setDescricao(results.getString(2));
+			}while(results.next());
+		}
+		catch(SQLException ex)
+		{
+			System.err.println("Erro na Busca por todos os TiposPodutos: " + ex.getMessage());
 		}
 		
 		return encontrados;
@@ -131,4 +158,5 @@ public class TipoProdutoDAO {
 		
 		return false;
 	}
+
 }
