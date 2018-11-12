@@ -50,5 +50,6 @@ CREATE TABLE itens_pedido(
 	id_produto integer,
 	quantidade integer,
 	CONSTRAINT pedido_FK FOREIGN KEY (id_pedido) REFERENCES pedido(id_pedido),
-	CONSTRAINT produto_FK FOREIGN KEY (id_produto) REFERENCES produto(id_produto)
+	CONSTRAINT produto_FK FOREIGN KEY (id_produto) REFERENCES produto(id_produto),
+	CONSTRAINT itensPedido_PK PRIMARY KEY (id_pedido,id_produto)
 );

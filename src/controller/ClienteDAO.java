@@ -1,14 +1,12 @@
 
 package controller;
 
-import java.io.File;
-import java.io.IOException;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import model.Cliente;
-import utils.FileManager;
 
 
 public class ClienteDAO {
@@ -175,20 +173,26 @@ public class ClienteDAO {
 	
 	public static boolean update(Cliente cli,Cliente novosDados)
 	{
-		if(connect())
+		connect();
+		try
 		{
-			ArrayList registros = FileManager.readFile(db);
-			registros.set(registros.indexOf(cli), novosDados);
-			
-			FileManager.deleteFile(db);
-			
-			for(int i = 0;i < registros.size();i++)
-			{
-				FileManager.writeFile(db, registros.get(i),(i!=0));
-			}
+			String query = "update cliente set nome = ?, telefone = ?, endereco = ?, bairro = ?, cep = ? where id_cliente = ?";
+			statement = configureStatement(query);
+			statement.setString(1, novosDados.getNome());
+			statement.setString(2, novosDados.getTelefone());
+			statement.setString(3, novosDados.getEndereco());
+			statement.setString(4, novosDados.getBairro());
+			statement.setString(5, novosDados.getCep());
+			statement.setInt(6, cli.getId());
+			statement.executeUpdate();
+			db.getConnection().commit();
 			return true;
-			
 		}
+		catch(SQLException ex)
+		{
+			System.err.println("Erro no update do Cliente: " + ex.getMessage());
+		}
+		
 		return false;
 	}
 	
