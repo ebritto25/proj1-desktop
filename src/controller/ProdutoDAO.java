@@ -30,9 +30,9 @@ public class ProdutoDAO {
 	}
 	
 	
-	private static Produto produtoBuilder(ResultSet res) throws SQLException
-	{
-		TipoProduto tProduto = TipoProdutoDAO.queryByID(res.getInt(4));
+	private static Produto produtoBuilder() throws SQLException
+	{   
+		TipoProduto tProduto = TipoProdutoDAO.queryByID(results.getInt(4));
 		Produto p = new Produto();
 		
 		p.setId(results.getInt(1));
@@ -77,7 +77,7 @@ public class ProdutoDAO {
 			results = statement.executeQuery();
 			if(results.isFirst())
 			{
-				p = produtoBuilder(results);
+				p = produtoBuilder();
 			}
 		}
 		catch(SQLException ex)
@@ -103,7 +103,7 @@ public class ProdutoDAO {
 			
 			do
 			{	
-				encontrados.add(produtoBuilder(results));
+				encontrados.add(produtoBuilder());
 			}while(results.next());
 		}
 		catch(SQLException ex)
@@ -129,7 +129,7 @@ public class ProdutoDAO {
 			
 			do
 			{
-				encontrados.add(produtoBuilder(results));
+				encontrados.add(produtoBuilder());
 			}while(results.next());
 		}
 		catch(SQLException ex)
