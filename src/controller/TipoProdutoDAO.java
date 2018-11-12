@@ -48,13 +48,14 @@ public class TipoProdutoDAO {
 	
 	public static TipoProduto queryByID(int id)
 	{
-		TipoProduto tp = null;
+		TipoProduto tp = new TipoProduto();
 
 		connect();
 		try
 		{
 			String query = "select * from tipo_produto where id_tProduto = ?";
 			statement = configureStatement(query);
+			statement.setInt(1, id);
 			results = statement.executeQuery();
 			if(!results.isFirst())
 			{
@@ -65,6 +66,7 @@ public class TipoProdutoDAO {
 		catch(SQLException ex)
 		{
 			System.err.println("Erro ao buscar por ID: " + ex);
+			return null;
 		}
 		
 		return tp;
@@ -87,6 +89,7 @@ public class TipoProdutoDAO {
 			{
 				tp.setId(results.getInt(1));
 				tp.setDescricao(results.getString(2));
+				encontrados.add(tp);
 			}while(results.next());
 		}
 		catch(SQLException ex)
@@ -101,19 +104,24 @@ public class TipoProdutoDAO {
 	{
 		ArrayList<TipoProduto> encontrados = new ArrayList<>();
 		
-		if(connect())
+		connect();
+		
+		try
 		{
-			ArrayList<TipoProduto> registros = FileManager.readFile(db);
-			
-			if(registros.isEmpty())
-				return encontrados;
-			
-			for(Object registro : registros)
+			String query = "select * from tipo_produto where descricao_tProduto like ?";
+			statement = configureStatement(query);
+			statement.setString(1, "%"+descricao+"%");
+			results = statement.executeQuery();
+			TipoProduto tp = new TipoProduto();
+			do
 			{
-				TipoProduto tp = (TipoProduto)registro;
-				if(tp.getDescricao().toUpperCase().contains(descricao.toUpperCase()))
-					encontrados.add(tp);
-			}
+				tp.setId(results.getInt(1));
+				tp.setDescricao(results.getString(2));
+			}while(results.next());
+		}
+		catch(SQLException ex)
+		{
+			System.err.println("Erro na Busca por todos os TiposPodutos: " + ex.getMessage());
 		}
 		
 		return encontrados;
@@ -122,38 +130,41 @@ public class TipoProdutoDAO {
 	public static boolean update(TipoProduto tp, TipoProduto novosDados)
 	{
 		
-		if(connect())
+		connect();
+		try
 		{
-			ArrayList<TipoProduto> registros = FileManager.readFile(db);
-			registros.set(registros.indexOf(tp), novosDados);
-			
-			FileManager.deleteFile(db);
-			
-			for(int i = 0;i < registros.size();i++)
-			{
-				FileManager.writeFile(db, registros.get(i), (i!=0));
-			}
+			String query = "update tipo_produto set descricao_tProduto = ? where id_tProduto = ?";
+			statement = configureStatement(query);
+			statement.setString(1, novosDados.getDescricao());
+			statement.setInt(2, tp.getId());
+			statement.executeUpdate();
+			db.getConnection().commit();
 			return true;
 		}
+		catch(SQLException ex)
+		{
+			System.err.println("Erro no update do TipoProduto: " + ex.getMessage());
+		}
+		
 		return false;
 	}
 		
 	public static boolean delete(TipoProduto tp)
 	{
 		
-		if(connect())
+		connect();
+		try
 		{
-			ArrayList<TipoProduto> registros = FileManager.readFile(db);
-			registros.remove(tp);
-			
-			FileManager.deleteFile(db);
-			
-			for(int i = 0;i < registros.size();i++)
-			{
-				FileManager.writeFile(db, registros.get(i), (i != 0));
-			}
-			
+			String query = "delete from tipo_produto where id_tProduto = ?";
+			statement = configureStatement(query);
+			statement.setInt(1, tp.getId());
+			statement.executeUpdate();
+			db.getConnection().commit();
 			return true;
+		}
+		catch(SQLException ex)
+		{
+			System.err.println("Erro no delete do TipoProduto: " + ex.getMessage());
 		}
 		
 		return false;
