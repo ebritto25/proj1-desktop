@@ -11,6 +11,7 @@ public class TipoPagamento implements Serializable{
 	private int id;
 	private String descricao;
 	
+        public TipoPagamento() {}
 	
 	public TipoPagamento(String tp)
 	{
