@@ -87,13 +87,13 @@ public class TipoProdutoDAO {
 			statement = configureStatement(query);
 			results = statement.executeQuery();
 			
-			do
+			while(results.next())
 			{	
 				TipoProduto tp = new TipoProduto();
 				tp.setId(results.getInt(1));
 				tp.setDescricao(results.getString(2));
 				encontrados.add(tp);
-			}while(results.next());
+			}
 		}
 		catch(SQLException ex)
 		{
