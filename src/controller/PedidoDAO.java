@@ -22,7 +22,7 @@ public class PedidoDAO {
             db = Database.getInstance();
 	}
         
-        private static PreparedStatement configureStatement(String sql) throws SQLException
+    private static PreparedStatement configureStatement(String sql) throws SQLException
 	{
 		return db.getConnection().prepareStatement(sql,ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
 	}
