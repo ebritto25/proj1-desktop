@@ -57,11 +57,13 @@ public class TipoProdutoDAO {
 			statement = configureStatement(query);
 			statement.setInt(1, id);
 			results = statement.executeQuery();
-			if(!results.isFirst())
+			
+			if(results.isFirst())
 			{
 				tp.setId(results.getInt(1));
 				tp.setDescricao(results.getString(2));
 			}
+			
 		}
 		catch(SQLException ex)
 		{
@@ -84,9 +86,10 @@ public class TipoProdutoDAO {
 			String query = "select * from tipo_produto";
 			statement = configureStatement(query);
 			results = statement.executeQuery();
-			TipoProduto tp = new TipoProduto();
+			
 			do
-			{
+			{	
+				TipoProduto tp = new TipoProduto();
 				tp.setId(results.getInt(1));
 				tp.setDescricao(results.getString(2));
 				encontrados.add(tp);
@@ -112,16 +115,18 @@ public class TipoProdutoDAO {
 			statement = configureStatement(query);
 			statement.setString(1, "%"+descricao+"%");
 			results = statement.executeQuery();
-			TipoProduto tp = new TipoProduto();
+			
 			do
 			{
+				TipoProduto tp = new TipoProduto();
 				tp.setId(results.getInt(1));
 				tp.setDescricao(results.getString(2));
+				encontrados.add(tp);
 			}while(results.next());
 		}
 		catch(SQLException ex)
 		{
-			System.err.println("Erro na Busca por todos os TiposPodutos: " + ex.getMessage());
+			System.err.println("Erro na Busca por descricao dos TiposPodutos: " + ex.getMessage());
 		}
 		
 		return encontrados;

@@ -3,6 +3,9 @@ package controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import model.Cliente;
 import utils.FileManager;
@@ -10,66 +13,115 @@ import utils.FileManager;
 
 public class ClienteDAO {
 
-	public static File db;
+	private static Database db;
+	private static PreparedStatement statement;
+	private static ResultSet results = null;
 
 	public ClienteDAO()
 	{
 		
 	}
 	
-	private static boolean connect()
+	private static void connect()
 	{
+
+		db = Database.getInstance();
+
+	}
+	
+	private static PreparedStatement configureStatement(String sql) throws SQLException
+	{
+		return db.getConnection().prepareStatement(sql,ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
+	}
+	
+	
+	private static Cliente clienteBuilder(ResultSet res) throws SQLException
+	{
+		Cliente c = new Cliente();
+		
+		c.setId(res.getInt(1));
+		c.setNome(res.getString(2));
+		c.setTelefone(res.getString(3));
+		c.setEndereco(res.getString(4));
+		c.setBairro(res.getString(5));
+		c.setCep(res.getString(6));
+
+		return c;
+	}
+	
+	public static boolean insert(Cliente cli)
+	{
+		connect();
+		
 		try{
-			db = Database.getInstance().getDatabaseClientes();		
+			String query = "insert into cliente (nome,telefone,endereco,bairro,cep) values (?,?,?,?,?)";
+			statement = configureStatement(query);
+			statement.setString(1, cli.getNome());
+			statement.setString(2, cli.getTelefone());
+			statement.setString(3, cli.getEndereco());
+			statement.setString(4, cli.getBairro());
+			statement.setString(5, cli.getCep());
+			statement.executeUpdate();
+			db.getConnection().commit();
 		}
-		catch(IOException ex)
-		{
-			System.err.println(ex.getMessage());
+		catch(SQLException ex){
+			System.err.println("Erro na inserção: " + ex.getMessage());
 			return false;
 		}
 		
 		return true;
 	}
 	
-	public static boolean insert(Cliente cli)
-	{
-		if(connect())
-		{
-			return FileManager.writeFile(db, cli,true);
-		}
-		
-		return false;
-	}
+	
 	
 	public static Cliente queryByID(int id)
 	{
 		
-		if(connect())
+		Cliente c = new Cliente();
+
+		connect();
+		try
 		{
-			ArrayList registros = FileManager.readFile(db);
+			String query = "select * from cliente where id_cliente = ?";
+			statement = configureStatement(query);
+			statement.setInt(1, id);
+			results = statement.executeQuery();
 			
-			if(registros.isEmpty())
-				return null;
-			
-			for(Object r : registros)
+			if(results.isFirst())
 			{
-				Cliente c = (Cliente)r;
-				if(id == c.getId())
-					return c;
+				c = clienteBuilder(results);
 			}
 			
 		}
+		catch(SQLException ex)
+		{
+			System.err.println("Erro ao buscar por ID: " + ex);
+			return null;
+		}
 		
-		return null;
+		return c;
 	}
 	
 	public static ArrayList<Cliente> queryAll()
 	{
 		ArrayList<Cliente> clientes = new ArrayList<>();
 		
-		if(connect())
+		connect();
+		
+		try
 		{
-			clientes = FileManager.readFile(db);                     
+			String query = "select * from cliente";
+			statement = configureStatement(query);
+			results = statement.executeQuery();
+			
+			do
+			{	
+				clientes.add(clienteBuilder(results));
+			}while(results.next());
+		}
+		catch(SQLException ex)
+		{
+			System.err.println("Erro na Busca por todos os Clientes: " + ex.getMessage());
 		}
 				
 		return clientes;
@@ -79,20 +131,23 @@ public class ClienteDAO {
 	{
 		ArrayList<Cliente> encontrados = new ArrayList<>();
 		
-		if(connect())
+		connect();
+		
+		try
 		{
-			ArrayList registros = FileManager.readFile(db);
+			String query = "select * from cliente where nome like ?";
+			statement = configureStatement(query);
+			statement.setString(1, "%"+nome+"%");
+			results = statement.executeQuery();
 			
-			if(registros.isEmpty())
-				return encontrados;
-			
-			for(Object registro : registros)
+			do
 			{
-				Cliente c = (Cliente) registro;
-				
-				if(c.getNome().toUpperCase().contains(nome.toUpperCase()))
-					encontrados.add(c);
-			}
+				encontrados.add(clienteBuilder(results));
+			}while(results.next());
+		}
+		catch(SQLException ex)
+		{
+			System.err.println("Erro na Busca por nome dos Clientes: " + ex.getMessage());
 		}
 		
 		return encontrados;
@@ -100,19 +155,19 @@ public class ClienteDAO {
 	
 	public static boolean delete(Cliente cli)
 	{
-		if(connect())
+		connect();
+		try
 		{
-			ArrayList registros = FileManager.readFile(db);
-			registros.remove(cli);
-			
-			FileManager.deleteFile(db);
-			
-			for(int i = 0;i < registros.size();i++)
-			{
-				FileManager.writeFile(db, registros.get(i),(i!=0));
-			}
+			String query = "delete from cliente where id_cliente = ?";
+			statement = configureStatement(query);
+			statement.setInt(1, cli.getId());
+			statement.executeUpdate();
+			db.getConnection().commit();
 			return true;
-			
+		}
+		catch(SQLException ex)
+		{
+			System.err.println("Erro no delete do Cliente: " + ex.getMessage());
 		}
 		
 		return false;
