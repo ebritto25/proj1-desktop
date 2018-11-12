@@ -1,10 +1,11 @@
+DROP DATABASE IF EXISTS projdesktop;
+CREATE DATABASE projdesktop;
+
 CREATE TABLE tipo_produto(
 	id_tProduto SERIAL,
 	descricao_tProduto varchar(50),
 	CONSTRAINT tProduto_PK PRIMARY KEY(id_tProduto)	
 );
-
---drop table tipo_produto;
 
 CREATE TABLE tipo_pagamento(
 	id_tPagamento SERIAL,
