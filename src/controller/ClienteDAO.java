@@ -33,16 +33,16 @@ public class ClienteDAO {
 	}
 	
 	
-	private static Cliente clienteBuilder(ResultSet res) throws SQLException
+	private static Cliente clienteBuilder() throws SQLException
 	{
 		Cliente c = new Cliente();
 		
-		c.setId(res.getInt(1));
-		c.setNome(res.getString(2));
-		c.setTelefone(res.getString(3));
-		c.setEndereco(res.getString(4));
-		c.setBairro(res.getString(5));
-		c.setCep(res.getString(6));
+		c.setId(results.getInt(1));
+		c.setNome(results.getString(2));
+		c.setTelefone(results.getString(3));
+		c.setEndereco(results.getString(4));
+		c.setBairro(results.getString(5));
+		c.setCep(results.getString(6));
 
 		return c;
 	}
@@ -87,7 +87,7 @@ public class ClienteDAO {
 			
 			if(results.isFirst())
 			{
-				c = clienteBuilder(results);
+				c = clienteBuilder();
 			}
 			
 		}
@@ -114,7 +114,7 @@ public class ClienteDAO {
 			
 			do
 			{	
-				clientes.add(clienteBuilder(results));
+				clientes.add(clienteBuilder());
 			}while(results.next());
 		}
 		catch(SQLException ex)
@@ -140,7 +140,7 @@ public class ClienteDAO {
 			
 			do
 			{
-				encontrados.add(clienteBuilder(results));
+				encontrados.add(clienteBuilder());
 			}while(results.next());
 		}
 		catch(SQLException ex)

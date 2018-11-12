@@ -26,13 +26,13 @@ public class ItensPedidoDAO {
 		return db.getConnection().prepareStatement(sql,ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
 	}
 	
-	private static ItensPedido itensPedidoBuilder(ResultSet res) throws SQLException
+	private static ItensPedido itensPedidoBuilder() throws SQLException
 	{
 		ItensPedido iP = new ItensPedido();
 		
-		iP.setPedido(PedidoDAO.queryByID(res.getInt(1)));
-		iP.setProduto(ProdutoDAO.queryByID(res.getInt(2)));
-		iP.setQuantidade(res.getInt(3));
+		iP.setPedido(PedidoDAO.queryByID(results.getInt(1)));
+		iP.setProduto(ProdutoDAO.queryByID(results.getInt(2)));
+		iP.setQuantidade(results.getInt(3));
 		
 		return iP;
 	}
@@ -71,7 +71,7 @@ public class ItensPedidoDAO {
 			
 			do
 			{
-				encontrados.add(itensPedidoBuilder(results));
+				encontrados.add(itensPedidoBuilder());
 			}while(results.next());
 		}
 		catch(SQLException ex)
@@ -96,7 +96,7 @@ public class ItensPedidoDAO {
 			
 			do
 			{
-				encontrados.add(itensPedidoBuilder(results));
+				encontrados.add(itensPedidoBuilder());
 			}while(results.next());
 		}
 		catch(SQLException ex)
